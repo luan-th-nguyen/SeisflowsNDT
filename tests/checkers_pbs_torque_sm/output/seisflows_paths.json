@@ -1,0 +1,20 @@
+{
+    "DATA": "", 
+    "FUNC": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalfunc", 
+    "GRAD": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalgrad", 
+    "HESS": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalhess", 
+    "LOCAL": null, 
+    "MASK": null, 
+    "MODEL_INIT": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/model_init", 
+    "MODEL_TRUE": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/model_true", 
+    "OPTIMIZE": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/optimize", 
+    "OUTPUT": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/output", 
+    "PRECOND": "", 
+    "SCRATCH": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch", 
+    "SOLVER": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/solver", 
+    "SPECFEM_BIN": "/home/luan/specfem2d-d745c542/bin", 
+    "SPECFEM_DATA": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/specfem2d-d745c542/DATA", 
+    "SUBMIT": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm", 
+    "SYSTEM": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/system", 
+    "WORKDIR": "/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm"
+}

@@ -119,7 +119,8 @@ class pbs_lg(custom_import('system', 'base')):
                 + '-l select=1:ncpus=%d:mpiprocs=%d ' % (ncpus, mpiprocs)
                 + '-l %s ' % walltime
                 + '-N %s ' % PAR.TITLE
-                + '-j %s '%'oe'
+                + '-j %s ' %'oe'
+                + '-q %s ' %'medium'
                 + '-o %s ' % (PATH.SUBMIT+'/'+'output.log')
                 + '-V '
                 + ' -- ' + findpath('seisflows.system') +'/'+ 'wrappers/submit '

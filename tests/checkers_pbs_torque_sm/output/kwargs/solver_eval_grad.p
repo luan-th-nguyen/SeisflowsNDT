@@ -1,0 +1,9 @@
+(dp0
+S'path'
+p1
+V/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalgrad
+p2
+sS'export_traces'
+p3
+I00
+s.

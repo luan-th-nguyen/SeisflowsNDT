@@ -1,0 +1,130 @@
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Luan, check environment variables, echo $PBS_O_PATH
+/home/luan/miniconda2/bin:/opt/intel/composer_xe_2015.2.164/bin/intel64:/opt/intel/composer_xe_2015.2.164/debugger/gdb/intel64_mic/bin:/home/luan/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games:/opt/torque/bin:/data/GZB/luan/seisflows/scripts/:/data/GZB/luan/seisflows/seisflows/
+Traceback (most recent call last):
+  File "/data/GZB/luan/seisflows/seisflows/system/wrappers/run", line 40, in <module>
+    from seisflows.tools.tools import loadjson, loadobj
+ImportError: No module named seisflows.tools.tools
+Copying data
+Luan debugging pbsdsh
+
+pbsdsh /data/GZB/luan/seisflows/seisflows/system/wrappers/export_paths.sh :/data/GZB/luan/seisflows/ /opt/intel/composer_xe_2015.2.164/compiler/lib/intel64:/opt/intel/composer_xe_2015.2.164/mpirt/lib/intel64:/opt/intel/composer_xe_2015.2.164/compiler/lib/intel64:/opt/intel/composer_xe_2015.2.164/mkl/lib/intel64:/opt/intel/composer_xe_2015.2.164/debugger/ipt/intel64/lib /data/GZB/luan/seisflows/seisflows/system/wrappers/run /data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/output solver setup 
+
+Starting iteration 1
+Generating synthetics
+Luan debugging pbsdsh
+
+pbsdsh /data/GZB/luan/seisflows/seisflows/system/wrappers/export_paths.sh :/data/GZB/luan/seisflows/ /opt/intel/composer_xe_2015.2.164/compiler/lib/intel64:/opt/intel/composer_xe_2015.2.164/mpirt/lib/intel64:/opt/intel/composer_xe_2015.2.164/compiler/lib/intel64:/opt/intel/composer_xe_2015.2.164/mkl/lib/intel64:/opt/intel/composer_xe_2015.2.164/debugger/ipt/intel64/lib /data/GZB/luan/seisflows/seisflows/system/wrappers/run /data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/output solver eval_func 
+Computing gradient
+Luan debugging pbsdsh
+
+pbsdsh /data/GZB/luan/seisflows/seisflows/system/wrappers/export_paths.sh :/data/GZB/luan/seisflows/ /opt/intel/composer_xe_2015.2.164/compiler/lib/intel64:/opt/intel/composer_xe_2015.2.164/mpirt/lib/intel64:/opt/intel/composer_xe_2015.2.164/compiler/lib/intel64:/opt/intel/composer_xe_2015.2.164/mkl/lib/intel64:/opt/intel/composer_xe_2015.2.164/debugger/ipt/intel64/lib /data/GZB/luan/seisflows/seisflows/system/wrappers/run /data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/output solver eval_grad 
+Traceback (most recent call last):
+  File "/var/spool/torque/mom_priv/jobs/16029.master.cluster.SC", line 24, in <module>
+    workflow.main()
+  File "/data/GZB/luan/seisflows/seisflows/workflow/inversion.py", line 120, in main
+    self.evaluate_gradient()
+  File "/data/GZB/luan/seisflows/seisflows/workflow/inversion.py", line 226, in evaluate_gradient
+    self.write_gradient(path=PATH.GRAD, suffix='new')
+  File "/data/GZB/luan/seisflows/seisflows/workflow/inversion.py", line 273, in write_gradient
+    postprocess.write_gradient(path)
+  File "/data/GZB/luan/seisflows/seisflows/postprocess/base.py", line 73, in write_gradient
+    suffix='_kernel'))
+  File "/data/GZB/luan/seisflows/seisflows/solver/base.py", line 275, in load
+    path, prefix+key+suffix, iproc)
+  File "/data/GZB/luan/seisflows/seisflows/plugins/solver_io/fortran_binary.py", line 15, in read_slice
+    vals += [_read(filename)]
+  File "/data/GZB/luan/seisflows/seisflows/plugins/solver_io/fortran_binary.py", line 37, in _read
+    nbytes = getsize(filename)
+  File "/home/luan/miniconda2/lib/python2.7/genericpath.py", line 57, in getsize
+    return os.stat(filename).st_size
+OSError: [Errno 2] No such file or directory: '/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalgrad/kernels/sum/proc000000_vs_kernel.bin'

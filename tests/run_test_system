@@ -17,4 +17,7 @@ echo "TESTING multicore..."
 sfrun --workdir=$WD --parameter_file=$WD/parameters_multicore --path_file=$WD/paths
 rm -rf $WD/output* $WD/scratch
 
+echo "TESTING pbs_torque_small..."
+sfrun --workdir=$WD --parameter_file=$WD/parameters_pbs_torque_sm --path_file=$WD/paths
+rm -rf $WD/output* $WD/scratch
 

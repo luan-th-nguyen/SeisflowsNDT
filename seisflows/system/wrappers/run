@@ -3,7 +3,6 @@
 import os
 import sys
 
-
 def export(myenv):
     # exports comma delimited list of environment variables
     # e.g. VARNAME1=value1,VARNAME2=value2
@@ -21,13 +20,17 @@ if __name__ == '__main__':
     myclass = sys.argv[2]
     myfunc = sys.argv[3]
 
+
     if nargs == 4: 
+        #pythonpath = sys.argv[4]
+        #sys.path.append(pythonpath)
         myenv = sys.argv[4].strip(',')
         export(myenv)
 
     from os.path import join
     from seisflows.tools.tools import loadjson, loadobj
     from seisflows.config import load
+    
 
     # reload from last checkpoint
     load(mypath)

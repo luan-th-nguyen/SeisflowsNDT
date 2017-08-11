@@ -1,0 +1,7 @@
+
+WORKFLOW='test_system'
+SYSTEM='pbs_torque_sm'
+MEMORY=2
+NPROC=4
+NODESIZE = 24
+NTASK=4

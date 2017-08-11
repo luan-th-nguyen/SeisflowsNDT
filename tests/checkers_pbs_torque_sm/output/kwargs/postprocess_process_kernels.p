@@ -1,0 +1,11 @@
+(dp0
+S'path'
+p1
+V/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalgrad/kernels
+p2
+sS'parameters'
+p3
+(lp4
+S'vs'
+p5
+as.
