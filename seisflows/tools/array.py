@@ -61,6 +61,8 @@ def uniquerows(a, sort_array=False, return_index=False):
 def stack(*args):
     return np.column_stack(args)
 
+def append(*args):
+    return np.vstack(args)
 
 ### array input/output
 
@@ -105,11 +107,23 @@ def gridsmooth(Z, span):
 def meshsmooth(v, mesh, span):
     """ Smooths values on 2D unstructured mesh
     """
+
+    # record bounds of each slice
+    bounds=[0]
+    bounds.append(v[0].size)
+    if len(v)>1:
+	for i in range(1,len(v)):
+	    #bounds.append(bounds[-1] + 1)
+	    bounds.append(bounds[-1] + v[i].size)
+
+    # join data slices
+    v = np.concatenate(v)
+
     V, grid = mesh2grid(v, mesh)
     nz, nx = V.shape
     W = np.ones((nz, nx))
 
-    # maks nans
+    # check nans
     inan = np.isnan(V)
     if np.any(inan):
         V[inan] = 0.
@@ -124,8 +138,13 @@ def meshsmooth(v, mesh, span):
         V[inan] = 0.
 
     vs = grid2mesh(V, grid, mesh)
-    return vs
 
+    # split data into slices for return
+    vss = []
+    for i in range(1,len(bounds)):
+	vss.append(vs[bounds[i-1]:bounds[i]])
+
+    return vss
 
 def mesh2grid(v, mesh):
     """ Interpolates from an unstructured coordinates (mesh) to a structured 

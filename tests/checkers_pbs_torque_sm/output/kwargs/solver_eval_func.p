@@ -1,6 +1,0 @@
-(dp0
-S'path'
-p1
-V/data/GZB/luan/seisflows/tests/checkers_pbs_torque_sm/scratch/evalgrad
-p2
-s.
