@@ -94,20 +94,17 @@ def smooth_legacy(input_path='', output_path='', parameters=[], span=0.):
         # intialize arrays
         kernels = {}	# kernels is 2d dict indexed by parameters and slices
         for key in parameters or solver.parameters:
-	    for iproc in range(nproc):
         	kernels[key] = []
 	#print len(kernels[key])
 
         coords = {}
         for key in ['x', 'z']:
-	    for iproc in range(nproc):
             	coords[key] = []
 
         # read kernels
         for key in parameters or solver.parameters:
 	    for iproc in range(nproc):
         	kernels[key] += solver.io.read_slice(input_path, key+'_kernel', iproc)
-		#print len(kernels[key][iproc])
 
         if not span:
             return kernels
@@ -124,10 +121,7 @@ def smooth_legacy(input_path='', output_path='', parameters=[], span=0.):
 
         # apply smoother
         for key in parameters or solver.parameters:
-            #kernels[key][:] = array.meshsmooth(kernels[key][:], mesh, span)
-            tmp = array.meshsmooth(kernels[key], mesh, span)
-	    for iproc in range(nproc):
-		kernels[key][iproc] = tmp[iproc]
+            kernels[key][:] = array.meshsmooth(kernels[key][:], mesh, span)
 
         # write smooth kernels
         for key in parameters or solver.parameters:

@@ -113,7 +113,6 @@ def meshsmooth(v, mesh, span):
     bounds.append(v[0].size)
     if len(v)>1:
 	for i in range(1,len(v)):
-	    #bounds.append(bounds[-1] + 1)
 	    bounds.append(bounds[-1] + v[i].size)
 
     # join data slices
