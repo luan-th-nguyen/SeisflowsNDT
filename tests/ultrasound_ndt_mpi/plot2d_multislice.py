@@ -3,7 +3,9 @@
 import sys
 from os.path import exists
 import numpy as np
-import pylab
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import scipy.interpolate
 
 
@@ -29,8 +31,8 @@ def read_multislice(model, NSLICE, parameter):
     model_all = np.empty(shape=(0, 0))
 
     for si in range(NSLICE):
-	file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
-	file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
+	file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
+	file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
 	file_d = model + '/proc' + str(si).zfill(6) + '_' + parameter + '.bin'
 
 	# check that files actually exist
@@ -116,18 +118,20 @@ if __name__ == '__main__':
     # interpolate to uniform rectangular grid
     V = mesh2grid(v, x, z)
 
+    #plt.ioff()
     # display figure
-    fig, ax = pylab.subplots()
-    pylab.pcolor(V[:,:])
-    #pylab.pcolor(V[30:-30,:])
-    #pylab.pcolor(V,vmin=0, vmax=5800)
-    #pylab.imshow(V,vmin=2150, vmax=5800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vp
-    #pylab.imshow(V,vmin=0, vmax=2800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vs
-    pylab.axes().set_aspect('equal')
-    #ax.set_ylim(0.20,0)
-    pylab.xlabel('x [m]')
-    pylab.ylabel('z [m]')
-    pylab.colorbar(orientation='horizontal',label=parameter)
-    #pylab.show()
-    pylab.savefig(model+parameter+'.png',pdi=150,format='png')
+    fig = plt.figure()
+
+    plt.pcolor(V[:,:])
+    #plt.imshow(V,vmin=2150, vmax=5800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vp
+    #plt.imshow(V,vmin=0, vmax=2800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vs
+    plt.axis('equal')
+    plt.axis('tight')
+    
+    plt.xlabel('x [m]')
+    plt.ylabel('z [m]')
+    plt.colorbar(orientation='horizontal',label=parameter)
+    #plt.show()
+    fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
+    #fig.savefig('figure.png')
 
