@@ -13,7 +13,8 @@ from seisflows.config import ParameterError, custom_import
 PAR = sys.modules['seisflows_parameters']
 PATH = sys.modules['seisflows_paths']
 
-
+# Workarounds for TORQUE 4.2.9
+# Run PAR.NTASK in a job-array, each mpi job is run on PAR.NPROC processes
 class pbs_torque_lg(custom_import('system', 'base')):
     """ An interface through which to submit workflows, run tasks in serial or
       parallel, and perform other system functions.
@@ -35,8 +36,6 @@ class pbs_torque_lg(custom_import('system', 'base')):
     def check(self):
         """ Checks parameters and paths
         """
-        print msg.Warning_pbs_lg
-
         # name of job
         if 'TITLE' not in PAR:
             setattr(PAR, 'TITLE', basename(abspath('.')))
@@ -52,6 +51,10 @@ class pbs_torque_lg(custom_import('system', 'base')):
         # number of cores per task
         if 'NPROC' not in PAR:
             raise ParameterError(PAR, 'NPROC')
+
+        # number of requested nodes
+        if 'NODES' not in PAR:
+            raise ParameterError(PAR, 'NODES')
 
         # number of cores per node
         if 'NODESIZE' not in PAR:
@@ -111,7 +114,7 @@ class pbs_torque_lg(custom_import('system', 'base')):
         minutes = PAR.WALLTIME%60
         resources = 'walltime=%02d:%02d:00' % (hours, minutes)
 
-        nodes = 1 # TO-DO
+        nodes = PAR.NODES 
 
         resources += ',nodes=%d:ppn=%d'%(nodes, PAR.NODESIZE)
 
@@ -133,10 +136,10 @@ class pbs_torque_lg(custom_import('system', 'base')):
                 + '-o %s ' %( PATH.WORKDIR +'/'+ 'output.log') \
                 + '-l %s ' % resources \
                 + '-j %s ' % 'oe' \
+		+ '-V ' \
                 + findpath('seisflows.system') + '/'+'wrappers/submit ' \
-                + '-F "%s"' % PATH.OUTPUT
-
-	print cmd
+                + '-F %s' % PATH.OUTPUT
+	#print cmd
 	call(cmd)
 
 
@@ -154,6 +157,7 @@ class pbs_torque_lg(custom_import('system', 'base')):
             self._timestamp()
             isdone, jobs = self.job_array_status(classname, method, jobs)
             if isdone:
+		#print 'Job-array is finished' # testing
                 return
 
 
@@ -168,7 +172,7 @@ class pbs_torque_lg(custom_import('system', 'base')):
         """
         try:
             #return os.getenv('PBS_ARRAY_INDEX')
-            return os.getenv('PBS_ARRAYID')
+            return int(os.getenv('PBS_ARRAYID'))
         except:
             #raise Exception("PBS_ARRAY_INDEX environment variable not defined.")
             raise Exception("PBS_ARRAYID environment variable not defined.")
@@ -181,30 +185,32 @@ class pbs_torque_lg(custom_import('system', 'base')):
             call(self.job_array_cmd(classname, method, hosts),
                 stdout=f)
 
-        # retrieve job ids
+        # retrieve job id (only one job_id of the job-array is run at a time)
         with open(PATH.SYSTEM+'/'+'job_id', 'r') as f:
             line = f.readline()
             job = line.split()[-1].strip()
-        if hosts == 'all' and PAR.NTASK > 1:
-            nn = range(PAR.NTASK)
-            job0 = job.strip('[].sdb')
-            return [job0+'['+str(ii)+'].sdb' for ii in nn]
-        else:
-            return [job]
+	#print 'job-array is: %s' % job  # testing
+	#print 'hosts is: %s' % hosts	  # testing
+	return [job]		  # testing
+        #if hosts == 'all' and PAR.NTASK > 1:
+        #    nn = range(PAR.NTASK)
+        #    job0 = job.strip('[].sdb')
+        #    return [job0+'['+str(ii)+'].sdb' for ii in nn]
+        #else:
+        #    return [job]
 
 
     def job_array_cmd(self, classname, method, hosts):
-        nodes = math.ceil(PAR.NTASK/float(PAR.NODESIZE))
+        nodes = math.ceil(PAR.NPROC/float(PAR.NODESIZE))
         ncpus = PAR.NPROC
-        mpiprocs = PAR.NPROC
+        #mpiprocs = PAR.NPROC
 
-        #hours = PAR.TASKTIME/60
-        #minutes = PAR.TASKTIME%60
-        hours = PAR.WALLTIME/60
-        minutes = PAR.WALLTIME%60
+        hours = PAR.TASKTIME/60
+        minutes = PAR.TASKTIME%60
         resources = 'walltime=%02d:%02d:00'%(hours, minutes)
 
-        resources += ',nodes=%d:ppn=%d:procs=%d'%(nodes,ncpus,mpiprocs)
+        #resources += ',nodes=%d:ppn=%d:procs=%d'%(nodes,ncpus,mpiprocs)
+        resources += ',nodes=%d:ppn=%d'%(nodes,ncpus)
 
         #return ('qsub '
         #        + '%s ' % PAR.PBSARGS
@@ -223,18 +229,31 @@ class pbs_torque_lg(custom_import('system', 'base')):
         #        + 'PYTHONPATH='+findpath('seisflows.system'),+','
         #        + PAR.ENVIRONS)
 
-        cmd =   'qsub ' \
-                + '%s ' % PAR.PBSARGS \
+	# ssh is needed, no queuing is needed
+        cmd =   'ssh luan@master ' \
+		+'qsub ' \
+		+ '-l %s ' % resources \
                 + '-N %s ' % PAR.TITLE \
-                + '-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/') \
-                + '-l %s ' % resources \
+                + '-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/'+ '${PBS_ARRAYID}') \
                 + '-j %s ' % 'oe' \
-                + self.job_array_args(hosts) + ' ' \
-                + '-F "%s ' % PATH.OUTPUT + ' ' \
-                + classname + ' ' \
-                + method + '" ' \
-                + '-v '+'PYTHONPATH='+findpath('seisflows.system') + ',' \
-                + PAR.ENVIRONS
+		+ '-V ' \
+                + self.job_array_args(hosts)  \
+                + '-F %s' % PATH.OUTPUT + ',' \
+                + classname + ',' \
+                + method + ',' \
+                + 'PYTHONPATH='+findpath('seisflows.system') 
+
+	# testing qsub options
+        #cmd =   'ssh luan@master ' \
+	#	+'qsub ' \
+        #        + '-q small '  \
+        #        + '-t 0-%s ' % (PAR.NTASK-1) \
+        #        + '-N %s ' % PAR.TITLE \
+        #        + '-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/'+ '${PBS_ARRAYID}') \
+	#	+ '-V ' \
+	#	+ 'test.sh ' \
+	#	+ '-F 10,20'  #!!!arguments separated by ',' and are defined using -F!!!
+	#print cmd
 
 	return cmd
 
@@ -244,32 +263,43 @@ class pbs_torque_lg(custom_import('system', 'base')):
           #      +'-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/' + '${PBS_ARRAYID}')
           #      + ' -- ' + findpath('seisflows.system') +'/'+ 'wrappers/run ')
           args = ('-t 0-%s ' % (PAR.NTASK-1)
-                + findpath('seisflows.system') +'/'+ 'wrappers/run ')
+                + findpath('seisflows.system') +'/'+ 'wrappers/run_torque ')
 
         elif hosts == 'head':
           #args = ('-J 0-0 '
           #       +'-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/' + '${PBS_JOBID}')
           #       + ' -- ' + findpath('seisflows.system') +'/'+ 'wrappers/run ')
           args = ('-t 0-0 '
-                 + findpath('seisflows.system') +'/'+ 'wrappers/run ')
+                 + findpath('seisflows.system') +'/'+ 'wrappers/run_torque ')
         return args
 
 
     def job_array_status(self, classname, method, jobs):
         """ Determines completion status of one or more jobs
         """
-        states = []
-        for job in jobs:
-            state = self._query(job)
-            if state in ['C']:
-                states += [1]
-            else:
-                states += [0]
-            if state in ['F']:
-                print msg.TaskError_PBS % (classname, method, job)
-                sys.exit(-1)
-        isdone = all(states)
+        #states = []
+        #for job in jobs:
+        #    state = self._query(job)
+        #    if state in ['C']:
+        #        states += [1]
+        #    else:
+        #        states += [0]
+        #    if state in ['F']:
+        #        print msg.TaskError_PBS % (classname, method, job)
+        #        sys.exit(-1)
+        #isdone = all(states)
 
+        isdone = False
+        for job in jobs: #jobs variable contains only one job-id of the job-array 
+            state = self._query(job)
+	    #print 'job is: %s' % job
+	    #print 'state is: %s' % state
+            if state in ['R','Q']:
+		isdone = False
+	    else:
+		# job-array is done if its id cannot be listed !NOT GOOD: TODO
+		isdone = True
+		
         return isdone, jobs
 
 
@@ -278,10 +308,11 @@ class pbs_torque_lg(custom_import('system', 'base')):
         """
         # TODO: replace shell utilities with native Python
         with open(PATH.SYSTEM+'/'+'job_status', 'w') as f:
-            call('qstat -x -tJ ' + jobid + ' | '
+            #call('qstat -x -tJ ' + jobid + ' | '
+            call('qstat -t ' + jobid + ' | '
                 + 'tail -n 1 ' + ' | '
                 + 'awk \'{print $5}\'',
-                stdout=f)
+                stdout=f,stderr=open(os.devnull,'wb'))
 
         with open(PATH.SYSTEM+'/'+'job_status', 'r') as f:
             line = f.readline()

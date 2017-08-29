@@ -1,8 +1,8 @@
 
 WORKFLOW='inversion'    # inversion, migration
-SOLVER='specfem2d_devel'      # specfem2d, specfem3d
+SOLVER='specfem2d_ndt'      # specfem2d, specfem3d
 SYSTEM='multicore'  	# serial, pbs, slurm
-NPROCMAX=48 #24
+NPROCMAX=24 #24
 #MEMORY=16
 #NODESIZE=24
 #MPIEXEC='/opt/openmpi/1.8.4/intel/bin/mpirun'
@@ -55,6 +55,6 @@ F0=40.                  # dominant frequency
 
 # SYSTEM
 NTASK= 10               # must satisfy 1 <= NTASK <= NSRC
-NTASKMAX = 10# 5
+NTASKMAX = 5# 5
 NPROC=4                 # processors per task
 WALLTIME=360

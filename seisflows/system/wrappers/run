@@ -20,6 +20,12 @@ if __name__ == '__main__':
     myclass = sys.argv[2]
     myfunc = sys.argv[3]
 
+    #print 'Check arguments for job-array'
+    #print mypath
+    #print myclass
+    #print myfunc
+    #print argv[4]
+
 
     if nargs == 4: 
         #pythonpath = sys.argv[4]

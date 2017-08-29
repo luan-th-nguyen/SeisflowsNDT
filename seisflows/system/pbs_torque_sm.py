@@ -37,6 +37,7 @@ class pbs_torque_sm(custom_import('system', 'base')):
         if 'TITLE' not in PAR:
             setattr(PAR, 'TITLE', basename(abspath('.')))
 
+        # time allocated for workflow in minutes
         if 'WALLTIME' not in PAR:
             setattr(PAR, 'WALLTIME', 30.)
 
@@ -46,15 +47,23 @@ class pbs_torque_sm(custom_import('system', 'base')):
         if 'VERBOSE' not in PAR:
             setattr(PAR, 'VERBOSE', 1)
 
+        # number of tasks
         if 'NTASK' not in PAR:
             raise ParameterError(PAR, 'NTASK')
 
+        # number of cores per task
         if 'NPROC' not in PAR:
             raise ParameterError(PAR, 'NPROC')
 
+        # number of requested nodes
+        if 'NODES' not in PAR:
+            raise ParameterError(PAR, 'NODES')
+
+        # number of cores per node
         if 'NODESIZE' not in PAR:
             raise ParameterError(PAR, 'NODESIZE')
 
+        # optional additional PBS arguments
         if 'PBSARGS' not in PAR:
             setattr(PAR, 'PBSARGS', '')
 
@@ -106,7 +115,8 @@ class pbs_torque_sm(custom_import('system', 'base')):
         self.checkpoint()
 
         # construct resource list
-        nodes = int(PAR.NTASK / PAR.NODESIZE)
+        #nodes = int(PAR.NTASK / PAR.NODESIZE)
+	nodes = PAR.NODES
         cores = PAR.NTASK % PAR.NODESIZE
         hours = int(PAR.WALLTIME / 60)
         minutes = PAR.WALLTIME % 60
@@ -117,12 +127,7 @@ class pbs_torque_sm(custom_import('system', 'base')):
         #    resources += ',mem=%dgb,nodes=%d:ppn=%d'%(PAR.MEMORY, nodes, PAR.NODESIZE)
         #else:
         #    resources += ',mem=%dgb,nodes=%d:ppn=%d+1:ppn=%d'%(PAR.MEMORY, nodes, PAR.NODESIZE, cores)
-        if nodes == 0:
-            resources += ',nodes=1:ppn=%d'%(cores)
-        elif cores == 0:
-            resources += ',nodes=%d:ppn=%d'%(nodes, PAR.NODESIZE)
-        else:
-            resources += ',nodes=%d:ppn=%d+1:ppn=%d'%(nodes, PAR.NODESIZE, cores)
+        resources += ',nodes=%d:ppn=%d'%(nodes, PAR.NODESIZE)
 
         # construct arguments list
         #call('qsub '
@@ -141,16 +146,18 @@ class pbs_torque_sm(custom_import('system', 'base')):
                 + '-l %s ' % resources \
                 + '-j %s ' % 'oe' \
                 + '-F "%s" ' % PATH.OUTPUT \
-                + findpath('seisflows.system') + '/'+'wrappers/submit '
-	call(cmd)
-	print 'Luan debugging qsub\n'
+                + findpath('seisflows.system') + '/'+'wrappers/submit ' \
+                + '-F %s' % PATH.OUTPUT
+
 	print cmd
+	call(cmd)
 
     def run(self, classname, funcname, hosts='all', **kwargs):
         """  Runs tasks in serial or parallel on specified hosts
         """
         self.checkpoint()
         self.save_kwargs(classname, funcname, kwargs)
+	PYTHONPATH = '/data/GZB/luan/seisflows_ndt/:/home/luan/miniconda2/lib/python27.zip:/home/luan/miniconda2/lib/python2.7:/home/luan/miniconda2/lib/python2.7/plat-linux2:/home/luan/miniconda2/lib/python2.7/lib-tk:/home/luan/miniconda2/lib/python2.7/lib-old:/home/luan/miniconda2/lib/python2.7/lib-dynload:/home/luan/miniconda2/lib/python2.7/site-packages:/home/luan/miniconda2/lib/python2.7/site-packages/cycler-0.10.0-py2.7.egg:/home/luan/miniconda2/lib/python2.7/site-packages/setuptools-27.2.0-py2.7.egg'
 
         if hosts == 'all':
             # run on all available nodes
@@ -164,18 +171,24 @@ class pbs_torque_sm(custom_import('system', 'base')):
             #        + funcname + ' ' \
             #        + 'PYTHONPATH='+findpath('seisflows')+',' \
 	    #	    + PAR.ENVIRONS
+
             cmd =   'pbsdsh ' \
-                    + 'bash -l '+join(findpath('seisflows.system'), 'wrappers/export_paths.sh ') \
-                    + os.getenv('PATH') + ' ' \
-                    + os.getenv('LD_LIBRARY_PATH') + ' ' \
-                    + findpath('seisflows.system') +'/'+'wrappers/run_pbsdsh ' \
+                    + findpath('seisflows.system') +'wrappers/run_torque_pbsdsh ' \
                     + PATH.OUTPUT + ' ' \
                     + classname + ' ' \
                     + funcname + ' ' \
-                    + 'PYTHONPATH='+findpath('seisflows')+',' \
-		    + PAR.ENVIRONS
+                    + 'SEISFOWSPATH='+findpath('seisflows.system') + ',' \
+                    + 'PATH='+os.getenv('PATH') + ',' \
+                    + 'PYTHONPATH='+PYTHONPATH 
 
-	    print 'Luan debugging pbsdsh all\n'
+            #cmd =   'pbsdsh ' \
+            #        + findpath('seisflows.system') +'wrappers/test ' \
+            #        + PATH.OUTPUT + ' ' \
+            #        + classname + ' ' \
+            #        + funcname + ' ' \
+            #        + 'SEISFOWSPATH='+findpath('seisflows.system') + ',' \
+            #        + 'PYTHONPATH='+os.getenv('PATH') 
+
 	    print cmd
 
 	    call(cmd)
@@ -192,17 +205,25 @@ class pbs_torque_sm(custom_import('system', 'base')):
             #        + funcname + ' '
             #        + 'PYTHONPATH='+findpath('seisflows')+',' 
 	    #	     + PAR.ENVIRONS)
-            call('pbsdsh '
-                    + 'bash -l '+join(findpath('seisflows.system'), 'wrappers/export_paths.sh ')
-                    + os.getenv('PATH') + ' '
-                    + os.getenv('LD_LIBRARY_PATH') + ' '
-                    + findpath('seisflows.system')+'/''wrappers/run_pbsdsh_head '
-                    + PATH.OUTPUT + ' '
-                    + classname + ' '
-                    + funcname + ' '
-                    + 'PYTHONPATH='+findpath('seisflows')+',' 
-		    + PAR.ENVIRONS)
 
+            cmd =   'pbsdsh ' \
+                    + findpath('seisflows.system') +'wrappers/run_torque_pbsdsh ' \
+                    + PATH.OUTPUT + ' ' \
+                    + classname + ' ' \
+                    + funcname + ' ' \
+                    + 'SEISFOWSPATH='+findpath('seisflows.system') + ',' \
+                    + 'PATH='+os.getenv('PATH') + ',' \
+                    + 'PYTHONPATH='+PYTHONPATH
+
+            #cmd =   'pbsdsh ' \
+            #        + findpath('seisflows.system') +'wrappers/test ' \
+            #        + PATH.OUTPUT + ' ' \
+            #        + classname + ' ' \
+            #        + funcname + ' ' \
+            #        + 'SEISFOWSPATH='+findpath('seisflows.system') + ',' \
+            #        + 'PYTHONPATH='+os.getenv('PATH') 
+
+	    print cmd
 
     def getnode(self):
         """ Gets number of running task

@@ -11,7 +11,8 @@ MASK = '/data/GZB/luan/seisflows_ndt/tests/ultrasound_ndt_pbs_torque_lg/model_ma
 
 PRECOND = ''
 
-SPECFEM_DATA = '/data/GZB/luan/seisflows_ndt/tests/ultrasound_ndt_pbs_torque_lg/specfem2d-devel/DATA'
+SPECFEM_DATA = '/data/GZB/luan/seisflows_ndt/tests/ultrasound_ndt_pbs_torque_lg/specfem2d_ndt/DATA'
 
-SPECFEM_BIN = '/home/luan/specfem2d-devel/bin'
+#SPECFEM_BIN = '/home/luan/specfem2d-devel/bin'
+SPECFEM_BIN = '/home/luan/specfem2d_ndt/bin'
 

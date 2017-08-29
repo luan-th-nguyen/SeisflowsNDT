@@ -1,12 +1,12 @@
 
 WORKFLOW='inversion'    # inversion, migration
-SOLVER='specfem2d'      # specfem2d, specfem3d
+SOLVER='specfem2d_ndt'      # specfem2d, specfem3d
 SYSTEM='pbs_torque_lg'  # serial, pbs, slurm
 PBSARGS='-q medium'      # PBS arguments
-MEMORY=16
+MEMORY=1
 NODESIZE=24
-#ENVIRONS='PBSDEBUG=yes'
-MPIEXEC='/opt/openmpi/1.8.4/intel/bin/mpirun'
+NODES=1
+MPIEXEC='mpirun'
 
 OPTIMIZE='LBFGS'        # NLCG, LBFGS
 PREPROCESS='base'       # base
@@ -19,7 +19,7 @@ DENSITY='Constant'
 
 # WORKFLOW
 BEGIN=1                 # first iteration
-END=5                   # last iteration
+END=1                   # last iteration
 NREC=10                 # number of receivers
 NSRC=10                 # number of sources
 SAVEGRADIENT=1          # save gradient how often
@@ -39,7 +39,7 @@ MUTESLOPE=0.            # mute slope
 
 # POSTPROCESSING
 SMOOTH=30.              # smoothing radius
-SCALE=6.0e6             # scaling factor
+#SCALE=6.0e6             # scaling factor
 
 
 # OPTIMIZATION
@@ -49,12 +49,13 @@ STEPTHRESH=0.1          # step length safeguard
 
 
 # SOLVER
-NT=4800                 # number of time steps
-DT=0.06                 # time step
-F0=0.084                # dominant frequency
+NT=2200                 # number of time steps
+DT=5.e-5                # time step
+F0=40.                  # dominant frequency
 
 
 # SYSTEM
-NTASK= 2 #5                # must satisfy 1 <= NTASK <= NSRC
+NTASK= 5 #5             # must satisfy 1 <= NTASK <= NSRC
 NPROC=4                 # processors per task
+TASKTIME=10
 WALLTIME=360

@@ -11,6 +11,9 @@ if __name__ == '__main__':
         PBS, LSF, or SLURM
     """
 
+    #print 'Check argument'
+    #print sys.argv[1]
+
     unix.cd(sys.argv[1])
 
     # reload saved state
