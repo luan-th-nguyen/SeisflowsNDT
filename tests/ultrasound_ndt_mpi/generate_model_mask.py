@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0,'../../seisflows/plugins/solver_io')
 from fortran_binary import read_slice, write_slice
 sys.path.insert(0,'../../seisflows/tools')
-from array import meshsmooth, append, stack
+from seisflows.tools.array import meshsmooth, append, stack
 import os
 from os.path import isdir, exists, getsize
 import numpy as np
