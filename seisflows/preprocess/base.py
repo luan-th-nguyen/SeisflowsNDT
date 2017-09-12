@@ -320,7 +320,7 @@ class base(object):
         if 'MuteEarlyArrivals' in PAR.MUTE:
             assert 'MUTE_EARLY_ARRIVALS_SLOPE' in PAR
             assert 'MUTE_EARLY_ARRIVALS_CONST' in PAR
-            #assert PAR.MUTE_EARLY_ARRIVALS_SLOPE >= 0.
+            assert PAR.MUTE_EARLY_ARRIVALS_SLOPE >= 0.
 
         if 'MuteLateArrivals' in PAR.MUTE:
             assert 'MUTE_LATE_ARRIVALS_SLOPE' in PAR
