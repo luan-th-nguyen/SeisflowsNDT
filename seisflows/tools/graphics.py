@@ -107,6 +107,13 @@ def plot_section(stream, ax=None, cmap='seismic', clip=100, title='', x_interval
     im = ax.imshow(data, aspect=scale_factor*d_aspect, clim=_cscale(data, clip=clip))
     im.set_cmap(cmap)
 
+    # plot 1 trace
+    t = _get_time(stream)
+    t = range(len(t))
+    ax.autoscale(enable='False',tight='True')
+    amp = 30.0
+    ax.plot(int(nr/4)+data[:,int(nr/4)]/data.max()*amp,t,'y-',linewidth=3.0)
+    
     # labels
     ax.set_title(title)
     ax.set_xlabel('Offset [km]')
