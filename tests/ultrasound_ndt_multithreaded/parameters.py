@@ -30,8 +30,8 @@ FREQLO=0.               # low frequency corner
 FREQHI=0.               # high frequency corner
 #MUTECONST=5.0e-2 #0.            # mute constant
 #MUTESLOPE=0.            # mute slope
-MUTE_EARLY_ARRIVALS_SLOPE = 5.0e-2
-MUTE_EARLY_ARRIVALS_CONST = 0.
+MUTE_EARLY_ARRIVALS_CONST = 5.0e-2
+MUTE_EARLY_ARRIVALS_SLOPE = 0.
 COMPENSATE='' 		#'Traveltime' # Compensation for later arrivals
 
 

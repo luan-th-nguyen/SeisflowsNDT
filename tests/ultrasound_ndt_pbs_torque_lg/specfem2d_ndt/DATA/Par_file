@@ -178,9 +178,9 @@ NUMBER_OF_SIMULTANEOUS_RUNS     = 1
 BROADCAST_SAME_MESH_AND_MODEL   = .true.
 
 absorbbottom                    = .false.
-absorbright                     = .false.
+absorbright                     = .true.
 absorbtop                       = .false.
-absorbleft                      = .false.
+absorbleft                      = .true.
 
 
 nbregions                       = 4

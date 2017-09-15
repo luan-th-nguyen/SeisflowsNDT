@@ -232,6 +232,7 @@ class pbs_torque_lg(custom_import('system', 'base')):
 	# ssh is needed, no queuing is needed
         cmd =   'ssh luan@master ' \
 		+'qsub ' \
+                + '%s ' % PAR.PBSARGS \
 		+ '-l %s ' % resources \
                 + '-N %s ' % PAR.TITLE \
                 + '-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/'+ '${PBS_ARRAYID}') \
