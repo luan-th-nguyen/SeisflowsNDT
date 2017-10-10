@@ -76,6 +76,8 @@ class base(object):
         parameters += ['vs']
     elif PAR.MATERIALS == 'Acoustic':
         parameters += ['vp']
+    elif PAR.MATERIALS == 'SH_Elastic':
+        parameters += ['vs']
 
     if PAR.DENSITY == 'Variable':
         parameters += ['rho']
