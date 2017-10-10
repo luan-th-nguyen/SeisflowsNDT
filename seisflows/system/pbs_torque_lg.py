@@ -53,8 +53,8 @@ class pbs_torque_lg(custom_import('system', 'base')):
             raise ParameterError(PAR, 'NPROC')
 
         # number of requested nodes
-        if 'NODES' not in PAR:
-            raise ParameterError(PAR, 'NODES')
+        #if 'NODES' not in PAR:
+        #    raise ParameterError(PAR, 'NODES')
 
         # number of cores per node
         if 'NODESIZE' not in PAR:
@@ -114,31 +114,27 @@ class pbs_torque_lg(custom_import('system', 'base')):
         minutes = PAR.WALLTIME%60
         resources = 'walltime=%02d:%02d:00' % (hours, minutes)
 
-        nodes = PAR.NODES 
+        #nodes = PAR.NODES 
+	#ncpus = PAR.NODESIZE
+	nodes = 1
+	ncpus = 1
 
-        resources += ',nodes=%d:ppn=%d'%(nodes, PAR.NODESIZE)
+        resources += ',nodes=%d:ppn=%d'%(nodes, ncpus)
 
         # prepare qsub arguments
-        #call( 'qsub '
-        #        + '%s ' % PAR.PBSARGS
-        #        + '-l select=1:ncpus=%d:mpiprocs=%d ' % (ncpus, mpiprocs)
-        #        + '-l %s ' % walltime
-        #        + '-N %s ' % PAR.TITLE
-        #        + '-j %s '%'oe'
-        #        + '-o %s ' % (PATH.WORKDIR+'/'+'output.log')
-        #        + '-V '
-        #        + ' -- ' + findpath('seisflows.system') +'/'+ 'wrappers/submit '
-        #        + PATH.OUTPUT)
-
         cmd =   'qsub ' \
-                + '%s ' % PAR.PBSARGS \
                 + '-N %s ' % PAR.TITLE \
-                + '-o %s ' %( PATH.WORKDIR +'/'+ 'output.log') \
                 + '-l %s ' % resources \
+                + '-o %s ' %( PATH.WORKDIR +'/'+ 'output.log') \
                 + '-j %s ' % 'oe' \
 		+ '-V ' \
                 + findpath('seisflows.system') + '/'+'wrappers/submit ' \
                 + '-F %s' % PATH.OUTPUT
+
+	# run command on head node
+        #cmd =   findpath('seisflows.system') + '/'+'wrappers/submit ' \
+        #        + PATH.OUTPUT
+
 	#print cmd
 	call(cmd)
 
@@ -192,46 +188,24 @@ class pbs_torque_lg(custom_import('system', 'base')):
 	#print 'job-array is: %s' % job  # testing
 	#print 'hosts is: %s' % hosts	  # testing
 	return [job]		  # testing
-        #if hosts == 'all' and PAR.NTASK > 1:
-        #    nn = range(PAR.NTASK)
-        #    job0 = job.strip('[].sdb')
-        #    return [job0+'['+str(ii)+'].sdb' for ii in nn]
-        #else:
-        #    return [job]
 
 
     def job_array_cmd(self, classname, method, hosts):
-        nodes = math.ceil(PAR.NPROC/float(PAR.NODESIZE))
+        nodes = math.ceil(PAR.NTASK*PAR.NPROC/float(PAR.NODESIZE))
         ncpus = PAR.NPROC
-        #mpiprocs = PAR.NPROC
+        mpiprocs = PAR.NPROC
 
         hours = PAR.TASKTIME/60
         minutes = PAR.TASKTIME%60
         resources = 'walltime=%02d:%02d:00'%(hours, minutes)
 
         #resources += ',nodes=%d:ppn=%d:procs=%d'%(nodes,ncpus,mpiprocs)
-        resources += ',nodes=%d:ppn=%d'%(nodes,ncpus)
+        #resources += ',nodes=%d:ppn=%d'%(nodes,ncpus)
+        resources += ',nodes=%d:ppn=%d'%(1,4)
 
-        #return ('qsub '
-        #        + '%s ' % PAR.PBSARGS
-        #        + '-l select=%d:ncpus=%d:mpiprocs=%d ' (nodes, ncpus, mpiprocs)
-        #        + '-l %s ' % walltime
-        #        + '-J 0-%s ' % (PAR.NTASK-1)
-        #        + '-N %s ' % PAR.TITLE
-        #        + '-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/' + '${PBS_ARRAYID}')
-        #        + '-r y '
-        #        + '-j oe '
-        #        + '-V '
-        #        + self.job_array_args(hosts)
-        #        + PATH.OUTPUT + ' '
-        #        + classname + ' '
-        #        + method + ' '
-        #        + 'PYTHONPATH='+findpath('seisflows.system'),+','
-        #        + PAR.ENVIRONS)
-
-	# ssh is needed, no queuing is needed
+	# ssh is needed because qsub from compute nodes are not allowed
         cmd =   'ssh luan@master ' \
-		+'qsub ' \
+		+ 'qsub ' \
                 + '%s ' % PAR.PBSARGS \
 		+ '-l %s ' % resources \
                 + '-N %s ' % PAR.TITLE \
@@ -242,20 +216,9 @@ class pbs_torque_lg(custom_import('system', 'base')):
                 + '-F %s' % PATH.OUTPUT + ',' \
                 + classname + ',' \
                 + method + ',' \
-                + 'PYTHONPATH='+findpath('seisflows.system') 
+                + 'SEISFLOWSPATH='+findpath('seisflows.system')
 
-	# testing qsub options
-        #cmd =   'ssh luan@master ' \
-	#	+'qsub ' \
-        #        + '-q small '  \
-        #        + '-t 0-%s ' % (PAR.NTASK-1) \
-        #        + '-N %s ' % PAR.TITLE \
-        #        + '-o %s ' % (PATH.WORKDIR+'/'+'output.pbs/'+ '${PBS_ARRAYID}') \
-	#	+ '-V ' \
-	#	+ 'test.sh ' \
-	#	+ '-F 10,20'  #!!!arguments separated by ',' and are defined using -F!!!
 	#print cmd
-
 	return cmd
 
     def job_array_args(self, hosts):
@@ -278,17 +241,6 @@ class pbs_torque_lg(custom_import('system', 'base')):
     def job_array_status(self, classname, method, jobs):
         """ Determines completion status of one or more jobs
         """
-        #states = []
-        #for job in jobs:
-        #    state = self._query(job)
-        #    if state in ['C']:
-        #        states += [1]
-        #    else:
-        #        states += [0]
-        #    if state in ['F']:
-        #        print msg.TaskError_PBS % (classname, method, job)
-        #        sys.exit(-1)
-        #isdone = all(states)
 
         isdone = False
         for job in jobs: #jobs variable contains only one job-id of the job-array 

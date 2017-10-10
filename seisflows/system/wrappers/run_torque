@@ -32,11 +32,10 @@ if __name__ == '__main__':
     print sys.path
 
 
-    if nargs == 4: 
-        #pythonpath = sys.argv[4]
-        #sys.path.append(pythonpath)
-        myenv = args[3].strip(',')
-        export(myenv)
+    if nargs >= 4: 
+	for i in range(3,nargs):
+            myenv = args[i].strip(',')
+            export(myenv)
 
     from os.path import join
     from seisflows.tools.tools import loadjson, loadobj
