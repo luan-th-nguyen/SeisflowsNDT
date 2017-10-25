@@ -111,7 +111,7 @@ def plot_section(stream, ax=None, cmap='seismic', clip=100, title='', x_interval
     t = _get_time(stream)
     t = range(len(t))
     ax.autoscale(enable='False',tight='True')
-    amp = 30.0
+    amp = 0.4*data[0,:].size
     ax.plot(int(nr/4)+data[:,int(nr/4)]/data.max()*amp,t,'y-',linewidth=3.0)
     
     # labels
