@@ -35,7 +35,7 @@ def _gabor(nt, dt, a, b):
     return y
 
 
-def gabor(nt, df, fp):
+def gabor(nt, dt, fp):
     a = np.pi*fp
     b = 2*np.pi*fp
     t = np.arange(-nt, nt+1)*dt
