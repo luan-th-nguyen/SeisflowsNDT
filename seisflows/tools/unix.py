@@ -1,5 +1,6 @@
 
 import os
+import errno
 import random
 import shutil
 import socket
@@ -75,10 +76,19 @@ def ls(path):
 
 
 def mkdir(dirs):
-    time.sleep(2 * random.random())
+    #time.sleep(2.0 * random.random())
     for dir in iterable(dirs):
-        if not os.path.isdir(dir):
+        #if not os.path.isdir(dir):
+	try:
             os.makedirs(dir)
+	except OSError as exc:  # Python >2.5
+            if exc.errno == errno.EEXIST and os.path.isdir(dir):
+        	pass
+            else:
+        	raise
+    	    #time.sleep(5.0 * random.random())
+            #if not os.path.isdir(dir):
+            #	os.makedirs(dir)
 
 def mv(src='', dst=''):
     if isinstance(src, (list, tuple)):
