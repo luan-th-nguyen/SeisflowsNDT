@@ -73,7 +73,8 @@ class migration(base):
         # perform migration
         print 'Generating synthetics...'
         system.run('solver', 'eval_func',
-                   path=PATH.SCRATCH)
+                   path=PATH.SCRATCH,
+		   write_residuals=False)
 
         print 'Backprojecting...'
         system.run('solver', 'eval_grad',
