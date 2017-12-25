@@ -1,6 +1,7 @@
 
 import sys
 import numpy as np
+import time
 
 from glob import glob
 from os.path import join
@@ -112,6 +113,7 @@ class inversion(base):
         """
         optimize.iter = PAR.BEGIN
         self.setup()
+	start_time = time.time()
         print ''
 
         while optimize.iter <= PAR.END:
@@ -130,9 +132,14 @@ class inversion(base):
             self.finalize()
             self.clean()
 
+	    current_time = time.time()
+	    print 'It has been %f minutes' % ((current_time - start_time)/60)
+
             optimize.iter += 1
             print ''
 
+	end_time = time.time()
+	print 'Done! It takes %f minutes to complete' % ((end_time - start_time)/60)
 
     def setup(self):
         """ Lays groundwork for inversion

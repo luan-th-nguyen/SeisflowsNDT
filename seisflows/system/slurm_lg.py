@@ -157,7 +157,7 @@ class slurm_lg(custom_import('system', 'base')):
         # check job array completion status
         while True:
             # wait a few seconds between queries
-            time.sleep(5)
+            time.sleep(0.1)
 
             isdone, jobs = self.job_array_status(classname, method, jobs)
             if isdone:

@@ -1,12 +1,13 @@
 
 import os
+import sys
 import numpy as np
 import subprocess
 
 from collections import defaultdict
 from os.path import abspath, join, exists
 from string import find
-from seisflows.tools import unix
+from seisflows.tools import msg, unix
 from seisflows.tools.tools import iterable
 
 
