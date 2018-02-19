@@ -153,7 +153,7 @@ class specfem2d_ndt(custom_import('solver', 'base')):
         setpar('SIMULATION_TYPE', '1')
         setpar('SAVE_FORWARD', '.true.')
 
-        #call_solver(system.mpiexec(), 'bin/xmeshfem2D')
+        call_solver(system.mpiexec(), 'bin/xmeshfem2D')
         call_solver(system.mpiexec(), 'bin/xspecfem2D')
 
         if PAR.FORMAT in ['SU', 'su']:
@@ -175,7 +175,7 @@ class specfem2d_ndt(custom_import('solver', 'base')):
             files = glob('traces/adj/*.su')
             unix.rename('.su', '.su.adj', files)
 
-        #call_solver(system.mpiexec(), 'bin/xmeshfem2D')
+        call_solver(system.mpiexec(), 'bin/xmeshfem2D')
         call_solver(system.mpiexec(), 'bin/xspecfem2D')
 
 

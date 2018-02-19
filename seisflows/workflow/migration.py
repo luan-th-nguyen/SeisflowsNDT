@@ -81,17 +81,19 @@ class migration(base):
                    path=PATH.SCRATCH,
                    export_traces=PAR.SAVETRACES)
 
+        print 'Kernel processing for arameters...' 
+	print solver.parameters
         system.run_single('postprocess', 'process_kernels',
                  path=PATH.SCRATCH+'/'+'kernels',
                  parameters=solver.parameters)
 
 
-        try:
-            system.run_single('postprocess', 'process_kernels',
-                     path=PATH.SCRATCH+'/'+'kernels',
-                     parameters=['rhop'])
-        except:
-            pass
+        #try:
+        #    system.run_single('postprocess', 'process_kernels',
+        #             path=PATH.SCRATCH+'/'+'kernels',
+        #             parameters=['rhop'])
+        #except:
+        #    pass
 
         if PAR.SAVETRACES:
             self.save_traces()
