@@ -74,19 +74,19 @@ class migration(base):
         print 'Generating synthetics...'
         system.run('solver', 'eval_func',
                    path=PATH.SCRATCH,
-		   write_residuals=False)
+                   export_traces=False,
+		   write_residuals=True)
 
         print 'Backprojecting...'
         system.run('solver', 'eval_grad',
                    path=PATH.SCRATCH,
                    export_traces=PAR.SAVETRACES)
 
-        print 'Kernel processing for arameters...' 
+        print 'Kernel processing for parameters...' 
 	print solver.parameters
         system.run_single('postprocess', 'process_kernels',
                  path=PATH.SCRATCH+'/'+'kernels',
                  parameters=solver.parameters)
-
 
         #try:
         #    system.run_single('postprocess', 'process_kernels',
