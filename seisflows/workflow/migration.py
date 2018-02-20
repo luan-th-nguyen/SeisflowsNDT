@@ -1,6 +1,7 @@
 
 import sys
 from glob import glob
+import time
 
 from seisflows.tools import unix
 from seisflows.tools.tools import exists
@@ -63,6 +64,8 @@ class migration(base):
         # set up workflow machinery
         preprocess.setup()
         postprocess.setup()
+	start_time = time.time()
+        print ''
 
         # set up solver machinery
         print 'Preparing solver...'
@@ -103,6 +106,8 @@ class migration(base):
         else:
             self.save_kernels_sum()
 
+	end_time = time.time()
+	print 'It takes %f minutes to complete' % ((end_time - start_time)/60)
         print 'Finished\n'
 
 

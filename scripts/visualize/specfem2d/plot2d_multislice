@@ -123,20 +123,22 @@ if __name__ == '__main__':
     #plt.ioff()
     # display figure
     fig = plt.figure()
+    #fig,ax = plt.subplots()
 
     #plt.pcolor(V[:,:],cmap='seismic')
-    plt.pcolor(V[:180,:],cmap='gray') # for RTM reflectivity image
-    #plt.pcolor(V[:,:],vmin=1600, vmax=2900,cmap='seismic') # for Vs
+    #plt.pcolor(V[:180,:],cmap='gray') # for RTM reflectivity image
+    plt.pcolor(V[:,:],vmin=1600, vmax=2900,cmap='seismic') # for Vs
     #plt.pcolor(V[:,:],vmin=3000, vmax=5100,cmap='seismic') # for Vp
     #plt.imshow(V,vmin=2150, vmax=5800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vp
     #plt.imshow(V,vmin=0, vmax=2800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vs
-    plt.axis('equal')
-    plt.axis('tight')
+    plt.axes().set_aspect('equal')
+    #plt.axis('equal')
+    #plt.axis('tight')
     
-    plt.xlabel('x [m]')
-    plt.ylabel('z [m]')
+    plt.xlabel('x [mm]')
+    plt.ylabel('z [mm]')
     plt.colorbar(orientation='horizontal',label=parameter)
-    #plt.show()
+    plt.show()
     fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
     #fig.savefig('figure.png')
 
