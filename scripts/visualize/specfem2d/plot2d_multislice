@@ -31,10 +31,10 @@ def read_multislice(model, NSLICE, parameter):
     model_all = np.empty(shape=(0, 0))
 
     for si in range(NSLICE):
-	#file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
-	#file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
-	file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
-	file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
+	file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
+	file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
+	#file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
+	#file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
 	file_d = model + '/proc' + str(si).zfill(6) + '_' + parameter + '.bin'
 
 	# check that files actually exist
@@ -126,19 +126,23 @@ if __name__ == '__main__':
     #fig,ax = plt.subplots()
 
     #plt.pcolor(V[:,:],cmap='seismic')
-    #plt.pcolor(V[:180,:],cmap='gray') # for RTM reflectivity image
-    plt.pcolor(V[:,:],vmin=1600, vmax=2900,cmap='seismic') # for Vs
+    #plt.pcolor(V[:280,:],cmap='gray') # for RTM reflectivity image
+    plt.pcolor(V[:,:],vmin=2500, vmax=3100,cmap='seismic') # for Vs
     #plt.pcolor(V[:,:],vmin=3000, vmax=5100,cmap='seismic') # for Vp
     #plt.imshow(V,vmin=2150, vmax=5800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vp
     #plt.imshow(V,vmin=0, vmax=2800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vs
     plt.axes().set_aspect('equal')
+    zticks = np.arange(0,z.max()+1,50).astype(int)
+    depth_ticks = zticks[::-1]
+    plt.yticks(zticks,depth_ticks)
     #plt.axis('equal')
     #plt.axis('tight')
     
     plt.xlabel('x [mm]')
     plt.ylabel('z [mm]')
+    plt.grid(linestyle='--',linewidth=1)
     plt.colorbar(orientation='horizontal',label=parameter)
-    plt.show()
+    #plt.show()
     fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
     #fig.savefig('figure.png')
 
