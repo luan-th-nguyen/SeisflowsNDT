@@ -1,5 +1,35 @@
-#!/bin/sh
+#!/usr/bin/env python
 
-rm -rf output*
-rm -rf scratch
+import argparse, os, sys
+import glob
+from seisflows.config import loadpy, tilde_expand
+from seisflows.tools import unix
+
+
+def getargs():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--workdir', nargs='?', 
+        default=os.getcwd())
+
+    parser.add_argument('--parameter_file', nargs='?', 
+        default='parameters.py')
+
+    parser.add_argument('--path_file', nargs='?', 
+        default='paths.py')
+
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    ### workflow submission script
+    args = getargs()
+
+    # register paths
+    paths = tilde_expand(loadpy(args.path_file))
+
+    # remove output* and scratch
+    unix.rm(paths.SCRATCH + './*')
+    for fl in glob.glob('./output*'):
+	unix.rm(fl)
 
