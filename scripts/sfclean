@@ -29,7 +29,8 @@ if __name__ == "__main__":
     paths = tilde_expand(loadpy(args.path_file))
 
     # remove output* and scratch
-    unix.rm(paths.SCRATCH + './*')
+    #unix.rm(paths.SCRATCH + './*')
+    unix.rm(paths.SCRATCH)
     for fl in glob.glob('./output*'):
 	unix.rm(fl)
 
