@@ -6,6 +6,7 @@ from seisflows.config import loadpy, tilde_expand
 from seisflows.tools import unix
 
 
+
 def getargs():
     parser = argparse.ArgumentParser()
 
@@ -29,8 +30,11 @@ if __name__ == "__main__":
     paths = tilde_expand(loadpy(args.path_file))
 
     # remove output* and scratch
-    #unix.rm(paths.SCRATCH + './*')
-    unix.rm(paths.SCRATCH)
+    if 'SCRATCH' in paths:
+	unix.rm(paths.SCRATCH)
+    else:
+	unix.rm('./scratch')
+
     for fl in glob.glob('./output*'):
 	unix.rm(fl)
 
