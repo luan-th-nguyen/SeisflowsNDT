@@ -39,12 +39,12 @@ def parse_args():
 
     parser.add_argument('-xint', '--x_interval', 
         type=float,
-        default='1.0',
+        default='0.1',
         help='offset axis tick spacing [km]')
 
     parser.add_argument('-yint', '--y_interval', 
         type=float,
-        default='1.0',
+        default='0.1',
         help='time axis tick spacing [s]')
 
     return parser.parse_args()

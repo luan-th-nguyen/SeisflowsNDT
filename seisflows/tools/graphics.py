@@ -58,7 +58,7 @@ def plot_vector(t, v, xlabel='', ylabel='', title=''):
     plt.show()
 
 
-def plot_section(stream, ax=None, cmap='seismic', clip=100, title='', x_interval=1.0, y_interval=1.0):
+def plot_section(stream, ax=None, cmap='seismic', clip=100, title='', x_interval=1., y_interval=1.):
     """  Plots a seismic section from an obspy stream.
 
     Parameters
@@ -116,8 +116,8 @@ def plot_section(stream, ax=None, cmap='seismic', clip=100, title='', x_interval
     
     # labels
     ax.set_title(title)
-    ax.set_xlabel('Offset [km]')
-    ax.set_ylabel('Time [s]')
+    ax.set_xlabel('Offset [m]')
+    ax.set_ylabel('Time [ms]')
 
     #set ticks
     t = _get_time(stream)
