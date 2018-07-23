@@ -183,6 +183,9 @@ def tv(Z, h=[], epsilon=1.e-6):
     nrow = Z.shape[0]
     ncol = Z.shape[1]
 
+    if h==[]:
+       h = np.ones((Z.ndim, 1))
+
     Zx = (Z[:,1:] - Z[:,:-1])/h[0]
     Zy = (Z[1:,:] - Z[:-1,:])/h[1]
 

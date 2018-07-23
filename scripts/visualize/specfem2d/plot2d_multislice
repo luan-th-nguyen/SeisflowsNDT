@@ -4,7 +4,7 @@ import sys
 from os.path import exists
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import scipy.interpolate
 
@@ -31,10 +31,10 @@ def read_multislice(model, NSLICE, parameter):
     model_all = np.empty(shape=(0, 0))
 
     for si in range(NSLICE):
-	file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
-	file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
-	#file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
-	#file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
+	#file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
+	#file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
+	file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
+	file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
 	file_d = model + '/proc' + str(si).zfill(6) + '_' + parameter + '.bin'
 
 	# check that files actually exist
@@ -142,7 +142,6 @@ if __name__ == '__main__':
     plt.ylabel('z [mm]')
     plt.grid(linestyle='--',linewidth=1)
     plt.colorbar(orientation='horizontal',label=parameter)
-    #plt.show()
-    fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
-    #fig.savefig('figure.png')
+    plt.show()
+    #fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
 

@@ -59,7 +59,7 @@ def uniquerows(a, sort_array=False, return_index=False):
 
 
 def stack(*args):
-    return np.column_stack(args)
+    return np.column_stack((args))
 
 def append(*args):
     return np.vstack(args)
