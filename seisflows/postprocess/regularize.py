@@ -57,10 +57,11 @@ class regularize(custom_import('postprocess', 'base')):
         #    return solver.merge(g)
 
         m = solver.load(path +'/'+ 'model')
-        mesh = self.getmesh()
+        #mesh = self.getmesh()
 
         for key in solver.parameters:
             for iproc in range(PAR.NPROC):
+        	mesh = self.getmesh(iproc)
                 g[key][iproc] += PAR.LAMBDA *\
                     self.nabla(mesh, m[key][iproc], g[key][iproc])
 
@@ -78,11 +79,10 @@ class regularize(custom_import('postprocess', 'base')):
                    output_path=path+'/'+'sum',
                    parameters=parameters)
 
-        if exists(path +'/'+ 'sum'):
+       	# mask sources and receivers
+	if (PAR.FIXRADIUS > 0):
             unix.mv(path +'/'+ 'sum', path +'/'+ 'sum_nofix')
-
-        # mask sources and receivers
-	self.fix_near_field(path=path)
+	    self.fix_near_field(path=path)
 
 
 
@@ -100,17 +100,18 @@ class regularize(custom_import('postprocess', 'base')):
         if not PAR.FIXRADIUS:
             return
 
-        x,z = self.getxz()
+        #x,z = self.getxz()
 
-        lx = x.max() - x.min()
-        lz = z.max() - z.min()
-        nn = x.size
-        nx = np.around(np.sqrt(1.0*nn*lx/lz))
-        nz = np.around(np.sqrt(1.0*nn*lz/lx))
-        dx = 1.0*lx/nx
-        dz = 1.0*lz/nz
+        #lx = x.max() - x.min()
+        #lz = z.max() - z.min()
+        #nn = x.size
+        #nx = np.around(np.sqrt(1.0*nn*lx/lz))
+        #nz = np.around(np.sqrt(1.0*nn*lz/lx))
+        #dx = 1.0*lx/nx
+        #dz = 1.0*lz/nz
 
-        sigma = 0.5*PAR.FIXRADIUS*(dx+dz)
+        #sigma = 0.5*PAR.FIXRADIUS*(dx+dz)
+        sigma = PAR.FIXRADIUS
 
 	sx = []
 	sy = []
@@ -125,23 +126,34 @@ class regularize(custom_import('postprocess', 'base')):
 
         # mask sources
 	for isrc in range(PAR.NSRC):
-            mask = np.exp(-0.5*((x-sx[isrc])**2.+(z-sy[isrc])**2.)/sigma**2.)
-            for key in solver.parameters:
-            	weight = np.sum(mask*g[key][0])/np.sum(mask)
-            	g[key][0] *= 1.-mask
-            	g[key][0] += mask*weight
+	    for iproc in range(PAR.NPROC):
+                x,z = self.getxz(iproc)
+                mask = np.exp(-0.5*((x-sx[isrc])**2.+(z-sy[isrc])**2.)/sigma**2.)
+		#print 'x.shape', x.shape
+		#print 'z.shape', z.shape
+		#print 'mask.shape', mask.shape
+                for key in solver.parameters:
+            	    #weight = np.sum(mask*g[key][iproc])/np.sum(mask)
+		    weight = 1.0
+		    #print 'weight:', weight
+		    #print 'g[key][iproc].shape', g[key][iproc].shape
+            	    g[key][iproc] *= 1.-mask
+            	    g[key][iproc] += mask*weight
 
         rx, ry, rz = preprocess.get_receiver_coords(
             preprocess.reader(
-                solver.cwd+'/'+'traces/obs', solver.data_filenames[0]))
+                PATH.SOLVER+'/'+solver.source_names[0]+'/'+'traces/obs', solver.data_filenames[0]))
 
         # mask receivers
         for ir in range(PAR.NREC):
-            mask = np.exp(-1.5*((x-rx[ir])**2.+(z-ry[ir])**2.)/sigma**2.)
-            for key in solver.parameters:
-                weight = np.sum(mask*g[key][0])/np.sum(mask)
-                g[key][0] *= 1.-mask
-                g[key][0] += mask*weight
+	    for iproc in range(PAR.NPROC):
+                x,z = self.getxz(iproc)
+                mask = np.exp(-1.5*((x-rx[ir])**2.+(z-ry[ir])**2.)/sigma**2.)
+                for key in solver.parameters:
+                    #weight = np.sum(mask*g[key][iproc])/np.sum(mask)
+		    weight = 1.0
+                    g[key][iproc] *= 1.-mask
+                    g[key][iproc] += mask*weight
 
         solver.save(g, path+'/'+ 'sum', parameters=solver.parameters, suffix='_kernel')
 
@@ -150,31 +162,31 @@ class regularize(custom_import('postprocess', 'base')):
         raise NotImplementedError("Must be implemented by subclass.")
 
 
-    def getmesh(self):
+    def getmesh(self, iproc):
         model_path = PATH.OUTPUT +'/'+ 'model_init'
         solver = sys.modules['seisflows_solver']
         try:
             m = solver.load(model_path)
-            x = m['x'][0]
-            z = m['z'][0]
+            x = m['x'][iproc]
+            z = m['z'][iproc]
             mesh = stack(x.flatten(), z.flatten())
         except:
-            x = solver.io.read_slice(model_path, 'x', 0)
-            z = solver.io.read_slice(model_path, 'z', 0)
+            x = solver.io.read_slice(model_path, 'x', iproc)
+            z = solver.io.read_slice(model_path, 'z', iproc)
             mesh = stack(x[0], z[0])
         return mesh
 
 
-    def getxz(self):
+    def getxz(self, iproc):
         model_path = PATH.OUTPUT +'/'+ 'model_init'
         solver = sys.modules['seisflows_solver']
         try:
             m = solver.load(model_path)
-            x = m['x'][0]
-            z = m['z'][0]
+            x = m['x'][iproc]
+            z = m['z'][iproc]
         except:
-            x = solver.io.read_slice(model_path, 'x', 0)
-            z = solver.io.read_slice(model_path, 'z', 0)
+            x = solver.io.read_slice(model_path, 'x', iproc)
+            z = solver.io.read_slice(model_path, 'z', iproc)
         #return x, z
         return np.array(x).flatten(), np.array(z).flatten()
 
