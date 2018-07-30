@@ -7,7 +7,7 @@ from seisflows.tools.array import loadnpy, savenpy
 from seisflows.tools.array import grid2mesh, mesh2grid, stack
 from seisflows.tools.tools import exists
 from seisflows.config import ParameterError, custom_import
-from seisflows.tools.math import nabla
+from seisflows.tools.math import nabla2
 
 
 PAR = sys.modules['seisflows_parameters']
@@ -44,13 +44,13 @@ class tikhonov2(custom_import('postprocess', 'regularize')):
     def nabla(self, mesh, m, g):
         if PAR.CREEPING:
             G, grid = mesh2grid(g, mesh)
-            DG = nabla(G, order=2)
+            DG = nabla2(G)
             dg = grid2mesh(DG, grid, mesh)
             return -dg/np.mean(m)
 
         else:
             M, grid = mesh2grid(m, mesh)
-            DM = nabla(M, order=2)
+            DM = nabla2(M)
             dm = grid2mesh(DM, grid, mesh)
             return dm/np.mean(m)
 

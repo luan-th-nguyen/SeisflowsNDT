@@ -49,23 +49,26 @@ class regularize(custom_import('postprocess', 'base')):
 
         #system.run_single('postprocess', 'process_kernels',
 	self.process_kernels(
-                 path=path+'/kernels',
-                 parameters=solver.parameters)
+            path=path+'/kernels',
+            parameters=solver.parameters)
 
-        g = solver.load(path +'/'+ 'kernels/sum', parameters=solver.parameters, suffix='_kernel')
-        #if not PAR.LAMBDA:
-        #    return solver.merge(g)
-
-        m = solver.load(path +'/'+ 'model')
         #mesh = self.getmesh()
 
-        for key in solver.parameters:
-            for iproc in range(PAR.NPROC):
-        	mesh = self.getmesh(iproc)
-                g[key][iproc] += PAR.LAMBDA *\
-                    self.nabla(mesh, m[key][iproc], g[key][iproc])
+        #for key in solver.parameters:
+        #    for iproc in range(PAR.NPROC):
+        #	mesh = self.getmesh(iproc)
+        #        g[key][iproc] += PAR.LAMBDA *\
+        #            self.nabla(mesh, m[key][iproc], g[key][iproc])
+	if (PAR.LAMBDA > 0): 
+	    # apply total variation each 'key' at a time
+	    for key in solver.parameters:
+        	g = solver.merge(solver.load(path +'/'+ 'kernels/sum', parameters=[key], suffix='_kernel'))
+        	m = solver.merge(solver.load(path +'/'+ 'model', parameters=[key]))
+        	mesh = self.getmesh_all()
+        	g += PAR.LAMBDA *\
+	    	    self.nabla(mesh, m, g)
 
-        self.save(solver.merge(g), path)
+        	self.save(g, path, parameters=[key])
 
 
     def process_kernels(self, path, parameters):
@@ -93,12 +96,6 @@ class regularize(custom_import('postprocess', 'base')):
 	preprocess = sys.modules['seisflows_preprocess']
         preprocess.setup()
 
-        #name = solver.source_names[solver.taskid]
-	name = 'sum_nofix'
-        fullpath = path +'/'+ name
-        g = solver.load(fullpath, suffix='_kernel')
-        if not PAR.FIXRADIUS:
-            return
 
         #x,z = self.getxz()
 
@@ -124,38 +121,31 @@ class regularize(custom_import('postprocess', 'base')):
 	    sy.append(ssy[0])
 	    sz.append(ssz[0])
 
-        # mask sources
-	for isrc in range(PAR.NSRC):
-	    for iproc in range(PAR.NPROC):
-                x,z = self.getxz(iproc)
-                mask = np.exp(-0.5*((x-sx[isrc])**2.+(z-sy[isrc])**2.)/sigma**2.)
-		#print 'x.shape', x.shape
-		#print 'z.shape', z.shape
-		#print 'mask.shape', mask.shape
-                for key in solver.parameters:
-            	    #weight = np.sum(mask*g[key][iproc])/np.sum(mask)
-		    weight = 1.0
-		    #print 'weight:', weight
-		    #print 'g[key][iproc].shape', g[key][iproc].shape
-            	    g[key][iproc] *= 1.-mask
-            	    g[key][iproc] += mask*weight
-
         rx, ry, rz = preprocess.get_receiver_coords(
             preprocess.reader(
                 PATH.SOLVER+'/'+solver.source_names[0]+'/'+'traces/obs', solver.data_filenames[0]))
 
-        # mask receivers
-        for ir in range(PAR.NREC):
-	    for iproc in range(PAR.NPROC):
-                x,z = self.getxz(iproc)
-                mask = np.exp(-1.5*((x-rx[ir])**2.+(z-ry[ir])**2.)/sigma**2.)
-                for key in solver.parameters:
-                    #weight = np.sum(mask*g[key][iproc])/np.sum(mask)
-		    weight = 1.0
-                    g[key][iproc] *= 1.-mask
-                    g[key][iproc] += mask*weight
+        mesh = self.getmesh_all()
+	x = mesh[:,0]
+	z = mesh[:,1]
 
-        solver.save(g, path+'/'+ 'sum', parameters=solver.parameters, suffix='_kernel')
+        # mask sources & receivers
+	for key in solver.parameters:
+            g = solver.merge(solver.load(path+'/'+'sum_nofix', parameters=[key], suffix='_kernel'))
+	    for isrc in range(PAR.NSRC):
+                mask = np.exp(-0.5*((x-sx[isrc])**2.+(z-sy[isrc])**2.)/sigma**2.)
+            	weight = np.sum(mask*g)/np.sum(mask)
+            	g *= 1.-mask
+            	g += mask*weight
+
+	    for ir in range(PAR.NREC):
+                mask = np.exp(-0.5*((x-rx[ir])**2.+(z-ry[ir])**2.)/sigma**2.)
+            	weight = np.sum(mask*g)/np.sum(mask)
+            	g *= 1.-mask
+            	g += mask*weight
+
+
+            solver.save(solver.split(g), path+'/'+ 'sum', parameters=[key], suffix='_kernel')
 
 
     def nabla(self, mesh, m, g):
@@ -176,6 +166,22 @@ class regularize(custom_import('postprocess', 'base')):
             mesh = stack(x[0], z[0])
         return mesh
 
+    def getmesh_all(self):
+        model_path = PATH.OUTPUT +'/'+ 'model_init'
+        solver = sys.modules['seisflows_solver']
+        try:
+            m = solver.load(model_path)
+            x = m['x'][:]
+            z = m['z'][:]
+            mesh = stack(x.flatten(), z.flatten())
+        except:
+	    for iproc in range (PAR.NPROC):
+            	x += solver.io.read_slice(model_path, 'x', iproc)
+            	z += solver.io.read_slice(model_path, 'z', iproc)
+	    x = np.concatenate(x[:])
+	    z = np.concatenate(z[:])
+            mesh = stack(x, z)
+        return mesh
 
     def getxz(self, iproc):
         model_path = PATH.OUTPUT +'/'+ 'model_init'
