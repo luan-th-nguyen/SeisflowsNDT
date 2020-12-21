@@ -112,8 +112,8 @@ def meshsmooth(v, mesh, span):
     bounds=[0]
     bounds.append(v[0].size)
     if len(v)>1:
-	for i in range(1,len(v)):
-	    bounds.append(bounds[-1] + v[i].size)
+        for i in range(1,len(v)):
+            bounds.append(bounds[-1] + v[i].size)
 
     # join data slices
     v = np.concatenate(v)
@@ -141,7 +141,7 @@ def meshsmooth(v, mesh, span):
     # split data into slices for return
     vss = []
     for i in range(1,len(bounds)):
-	vss.append(vs[bounds[i-1]:bounds[i]])
+        vss.append(vs[bounds[i-1]:bounds[i]])
 
     return vss
 

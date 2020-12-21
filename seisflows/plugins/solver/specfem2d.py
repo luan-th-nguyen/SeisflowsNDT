@@ -89,35 +89,35 @@ def smooth_legacy(input_path='', output_path='', parameters=[], span=0.):
 
         #if solver.mesh_properties.nproc!=1:
         #    raise NotImplementedError
-	nproc = solver.mesh_properties.nproc
+        nproc = solver.mesh_properties.nproc
 
         # intialize arrays
         kernels = {}	# kernels is 2d dict indexed by parameters and slices
         for key in parameters or solver.parameters:
-        	kernels[key] = []
-	#print len(kernels[key])
+            kernels[key] = []
+        #print len(kernels[key])
 
         coords = {}
         for key in ['x', 'z']:
-            	coords[key] = []
+            coords[key] = []
 
         # read kernels
         for key in parameters or solver.parameters:
-	    for iproc in range(nproc):
-        	kernels[key] += solver.io.read_slice(input_path, key+'_kernel', iproc)
+            for iproc in range(nproc):
+                kernels[key] += solver.io.read_slice(input_path, key+'_kernel', iproc)
 
         if not span:
             return kernels
 
         # read coordinates
         for key in ['x', 'z']:
-	    for iproc in range(nproc):
-        	coords[key] += solver.io.read_slice(PATH.MODEL_INIT, key, iproc)
+            for iproc in range(nproc):
+                coords[key] += solver.io.read_slice(PATH.MODEL_INIT, key, iproc)
 
-	mesh = array.stack(coords['x'][0], coords['z'][0])
-	if nproc > 1:
-	    for iproc in range(nproc-1):
-        	mesh = array.append(mesh,array.stack(coords['x'][iproc+1], coords['z'][iproc+1]))
+        mesh = array.stack(coords['x'][0], coords['z'][0])
+        if nproc > 1:
+            for iproc in range(nproc-1):
+                mesh = array.append(mesh,array.stack(coords['x'][iproc+1], coords['z'][iproc+1]))
 
         # apply smoother
         for key in parameters or solver.parameters:
@@ -125,6 +125,6 @@ def smooth_legacy(input_path='', output_path='', parameters=[], span=0.):
 
         # write smooth kernels
         for key in parameters or solver.parameters:
-	    for iproc in range(nproc):
-        	solver.io.write_slice(kernels[key][iproc], output_path, key+'_kernel', iproc)
+            for iproc in range(nproc):
+                solver.io.write_slice(kernels[key][iproc], output_path, key+'_kernel', iproc)
 

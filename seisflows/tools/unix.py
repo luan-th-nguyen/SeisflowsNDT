@@ -18,7 +18,7 @@ def cat(src, *dst):
     f.close()
 
     if not dst:
-        print contents
+        print(contents)
     else:
         f = open(dst, 'w')
         f.write(contents)
@@ -79,14 +79,14 @@ def mkdir(dirs):
     #time.sleep(2.0 * random.random())
     for dir in iterable(dirs):
         #if not os.path.isdir(dir):
-	try:
+        try:
             os.makedirs(dir)
-	except OSError as exc:  # Python >2.5
+        except OSError as exc:  # Python >2.5
             if exc.errno == errno.EEXIST and os.path.isdir(dir):
-        	pass
+                pass
             else:
-        	raise
-    	    #time.sleep(5.0 * random.random())
+                raise
+            #time.sleep(5.0 * random.random())
             #if not os.path.isdir(dir):
             #	os.makedirs(dir)
 
@@ -123,7 +123,7 @@ def rm(path=''):
 def select(items, prompt=''):
     while True:
         if prompt:
-            print prompt
+            print(prompt)
         for i, item in enumerate(items):
             print("%2d) %s" % (i + 1, item))
         try:

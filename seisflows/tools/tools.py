@@ -54,7 +54,10 @@ def exists(names):
     for name in iterable(names):
         if not name:
             return False
-        elif not isinstance(name, basestring):
+        #elif not isinstance(name, str):
+        elif not (isinstance(name, str) or isinstance(name, unicode)):
+	    print type(name)
+	    print name
             raise TypeError
         elif not os.path.exists(name):
             return False
@@ -126,7 +129,7 @@ def savejson(filename, obj):
 
 def loadpy(filename):
     if not exists(filename):
-        print msg.FileError % filename
+        print(msg.FileError % filename)
         raise IOError
 
     # load module
@@ -170,7 +173,7 @@ def loadyaml(filename):
 def getset(arg):
     if not arg:
         return set()
-    elif isinstance(arg, basestring):
+    elif isinstance(arg, str):
         return set([arg])
     else:
         return set(arg)
@@ -206,7 +209,7 @@ def _nproc2():
     # get number of processors using /proc/cpuinfo
     if not exists('/proc/cpuinfo'):
         raise EnvironmentError
-    stdout = check_output("cat /proc/cpuinfo | awk '/^processor/{print $3}'", 
+    stdout = check_output("cat /proc/cpuinfo | awk '/^processor/{print($3)}'", 
                 shell=True)
     nproc = len(stdout.split('\n'))
     return nproc

@@ -31,10 +31,10 @@ if __name__ == "__main__":
 
     # remove output* and scratch
     if 'SCRATCH' in paths:
-	unix.rm(paths.SCRATCH)
+        unix.rm(paths.SCRATCH)
     else:
-	unix.rm('./scratch')
+        unix.rm('./scratch')
 
     for fl in glob.glob('./output*'):
-	unix.rm(fl)
+        unix.rm(fl)
 

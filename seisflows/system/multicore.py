@@ -83,7 +83,7 @@ class multicore(custom_import('system', 'serial')):
             if running_tasks:
                 sleep(1.)
 
-        print ''
+        print('')
 
 
     def run_single(self, classname, method, *args, **kwargs):
