@@ -37,6 +37,10 @@ class test_system:
         print ''
 
 
+    def checkpoint(self):
+        print('Checkpoint is called')
+
+
     def hello(self, msg='Hello from %d'):
         """ Prints hello message
         """

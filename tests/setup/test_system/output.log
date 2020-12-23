@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/var/spool/torque/mom_priv/jobs/16020.master.cluster.SC", line 5, in <module>
-    from seisflows.tools import unix
-ImportError: No module named seisflows.tools
