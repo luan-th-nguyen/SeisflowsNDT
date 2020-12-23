@@ -109,6 +109,7 @@ class base(object):
 
         # prepare preconditioner
         if PAR.PRECOND:
+	    print PAR.PRECOND
             self.precond = getattr(preconds, PAR.PRECOND)()
         else:
             self.precond = None

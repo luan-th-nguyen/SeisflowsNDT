@@ -125,9 +125,9 @@ if __name__ == '__main__':
     fig = plt.figure()
     #fig,ax = plt.subplots()
 
-    #plt.pcolor(V[:,:],cmap='seismic')
+    plt.pcolor(V[:,:],cmap='seismic')
     #plt.pcolor(V[:280,:],cmap='gray') # for RTM reflectivity image
-    plt.pcolor(V[:,:],vmin=1200, vmax=2100,cmap='seismic') # for Vs
+    #plt.pcolor(V[:,:],vmin=1200, vmax=2100,cmap='seismic') # for Vs
     #plt.pcolor(V[:,:],vmin=3000, vmax=5100,cmap='seismic') # for Vp
     #plt.imshow(V,vmin=2150, vmax=5800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vp
     #plt.imshow(V,vmin=0, vmax=2800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vs

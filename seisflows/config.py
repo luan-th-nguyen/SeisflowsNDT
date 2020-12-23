@@ -1,5 +1,5 @@
 
-import copyreg
+import copy_reg
 import imp
 import os
 import re
@@ -240,5 +240,5 @@ def _unpickle_method(func_name, obj, cls):
     return func.__get__(obj, cls)
 
 
-copyreg.pickle(types.MethodType, _pickle_method, _unpickle_method)
+copy_reg.pickle(types.MethodType, _pickle_method, _unpickle_method)
 
