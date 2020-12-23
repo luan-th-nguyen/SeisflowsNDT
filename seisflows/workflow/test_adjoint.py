@@ -6,7 +6,7 @@ from glob import glob
 from os.path import basename, join
 from seisflows.tools import unix
 from seisflows.tools.tools import exists
-from seisflows.config import ParameterError
+from seisflows.config import ParameterError, custom_import
 from seisflows.workflow.base import base
 
 

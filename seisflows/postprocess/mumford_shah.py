@@ -1,17 +1,16 @@
 
 from glob import glob
-
+import sys
 import numpy as np
 
 from seisflows.tools import unix
 from seisflows.tools.array import loadnpy, savenpy
 from seisflows.tools.array import  mesh2grid, grid2mesh, stack
 from seisflows.tools.tools import call, exists
-from seisflows.config import , \
-    ParameterError, custom_import
+from seisflows.config import ParameterError, custom_import
 from seisflows.tools.math import grad, nabla, nabla2
 
-from seisflows.plugins.io import sem
+#from seisflows.plugins.io import sem
 
 PAR = sys.modules['seisflows_parameters']
 PATH = sys.modules['seisflows_paths']
