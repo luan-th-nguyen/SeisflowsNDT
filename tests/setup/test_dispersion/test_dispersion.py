@@ -34,15 +34,15 @@ class TestDispersionCode(unittest.TestCase):
         fmax = 600.0
         f,c,img,fmax_idx,U,t = dispersion.get_dispersion(u,dx,cmin,cmax,dc,fmax)
 
-        im, ax = plt.subplots(figsize=(7.0,5.0))
-        ax.imshow(img[:,:],aspect='auto',origin='lower',extent=(f[0],f[fmax_idx],c[0],c[-1]),interpolation='bilinear')
-        ax.set_xlabel('Frequency [kHz]', fontsize=14)
-        ax.set_ylabel('Phase velocity [m/s]', fontsize=14)
-        ax.tick_params(axis = 'both', which = 'major', labelsize = 14)
-        ax.tick_params(axis = 'both', which = 'minor', labelsize = 14)
-        cwd = os.getcwd()
-        path = os.path.join(cwd, 'setup/test_dispersion/guided_waves_pipe/data_L01/')
-        im.savefig(os.path.join(path, 'pipe_syn_dispersion_curves_L01.png'),dpi=300)
+        #im, ax = plt.subplots(figsize=(7.0,5.0))
+        #ax.imshow(img[:,:],aspect='auto',origin='lower',extent=(f[0],f[fmax_idx],c[0],c[-1]),interpolation='bilinear')
+        #ax.set_xlabel('Frequency [kHz]', fontsize=14)
+        #ax.set_ylabel('Phase velocity [m/s]', fontsize=14)
+        #ax.tick_params(axis = 'both', which = 'major', labelsize = 14)
+        #ax.tick_params(axis = 'both', which = 'minor', labelsize = 14)
+        #cwd = os.getcwd()
+        #path = os.path.join(cwd, 'setup/test_dispersion/guided_waves_pipe/data_L01/')
+        #im.savefig(os.path.join(path, 'pipe_syn_dispersion_curves_L01.png'),dpi=300)
 
         self.assertEqual(fmax_idx, 41)
 
