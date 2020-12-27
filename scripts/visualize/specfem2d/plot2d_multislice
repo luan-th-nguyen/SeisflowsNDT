@@ -88,7 +88,7 @@ def mesh2grid(v, x, z):
     print 'len(V) =', len(V)
     print 'nz =', nz
     print 'nx =', nx
-    return np.reshape(V, (int(nz), int(nx)))
+    return X, Z, np.reshape(V, (int(nz), int(nx)))
     
 
 
@@ -118,33 +118,37 @@ if __name__ == '__main__':
     x, z, v = read_multislice(model,NSLICE,parameter)
 
     # interpolate to uniform rectangular grid
-    V = mesh2grid(v, x, z)
+    X, Z, V = mesh2grid(v, x, z)
 
     #plt.ioff()
     # display figure
     fig = plt.figure()
     #fig,ax = plt.subplots()
 
-    plt.pcolor(V[:,:],cmap='seismic')
-    #plt.pcolor(V[:280,:],cmap='gray') # for RTM reflectivity image
-    #plt.pcolor(V[:,:],vmin=1200, vmax=2100,cmap='seismic') # for Vs
-    #plt.pcolor(V[:,:],vmin=3000, vmax=5100,cmap='seismic') # for Vp
-    #plt.imshow(V,vmin=2150, vmax=5800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vp
-    #plt.imshow(V,vmin=0, vmax=2800, extent=(x.min(), x.max(), z.min(), z.max())) # for Vs
+    #plt.pcolor(X, Z, V[:,:],cmap='seismic')
+    #plt.pcolor(X, Z, V[:,:], vmin=1200, vmax=3600, cmap='seismic') # for Vp
+    #plt.pcolor(X, Z, V[:,:], vmin=1800, vmax=2500, cmap='seismic') # for Rho
+    plt.pcolor(X, Z, V[:,:], vmin=500, vmax=2500, cmap='seismic') # for Vs
+
 
     plt.axes().set_aspect('equal')
+
     # set depth ticks
-    #zticks = np.arange(0,z.max()+1,50).astype(int)
-    #depth_ticks = zticks[::-1]
-    #plt.yticks(zticks,depth_ticks)
+    zticks = np.arange(start=0, stop=z.max()+1.0, step=2000, dtype=int)
+    xticks = np.arange(start=0, stop=x.max()+1.0, step=2000, dtype=int)
+    depth_ticks = zticks[::-1]*1.0e-3   # depth in meter
+    #depth_ticks = zticks[:]*1.0e-3   # depth in meter
+    width_ticks = xticks[:]*1.0e-3      # width in meter
+    plt.yticks(zticks,depth_ticks)
+    plt.xticks(xticks, width_ticks)
 
     #plt.axis('equal')
     #plt.axis('tight')
     
-    plt.xlabel('x [mm]')
-    plt.ylabel('z [mm]')
+    plt.xlabel('x [m]')
+    plt.ylabel('z [m]')
     plt.grid(linestyle='--',linewidth=1)
     plt.colorbar(orientation='horizontal',label=parameter)
-    plt.show()
-    #fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
+    #plt.show()
+    fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
 

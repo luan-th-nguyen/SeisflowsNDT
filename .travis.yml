@@ -14,5 +14,6 @@ script:
   - tests/run_test_optimize
   - tests/run_test_system
   - tests/run_test_tools
+  - tests/run_test_dispersion
 
 
