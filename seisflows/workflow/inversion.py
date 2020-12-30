@@ -51,6 +51,10 @@ class inversion(base):
         if 'END' not in PAR:
             raise ParameterError(PAR, 'END')
 
+        # estimate source 
+        if 'ESTIMATE_SOURCE' not in PAR:
+            setattr(PAR, 'ESTIMATE_SOURCE', False)
+
         # scratch paths
         if 'SCRATCH' not in PATH:
             raise ParameterError(PATH, 'SCRATCH')
@@ -118,6 +122,11 @@ class inversion(base):
 
         while optimize.iter <= PAR.END:
             print "Starting iteration", optimize.iter
+            
+            if PAR.ESTIMATE_SOURCE:
+                print "Estimating source time function"
+                self.estimate_source()
+
             self.initialize()
 
             print "Computing gradient"
@@ -132,8 +141,8 @@ class inversion(base):
             self.finalize()
             self.clean()
 
-	    current_time = time.time()
-	    print 'It has been %f minutes' % ((current_time - start_time)/60)
+            current_time = time.time()
+            print 'It has been %f minutes' % ((current_time - start_time)/60)
 
             optimize.iter += 1
             print ''
@@ -157,6 +166,15 @@ class inversion(base):
                 print 'Generating data' 
 
             system.run('solver', 'setup')
+
+
+    def estimate_source(self):
+        """ Estimates source time function
+        """
+        self.write_model(path=PATH.GRAD, suffix='new')
+
+        system.run('solver', 'eval_source',
+                   path=PATH.GRAD)
 
 
     def initialize(self):

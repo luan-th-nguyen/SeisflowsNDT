@@ -88,6 +88,44 @@ def setpar(key, val, filename='DATA/Par_file', path='.', sep='='):
         file.writelines(lines)
 
 
+def write_source_specfem2d(s_coords_x, s_coords_y, f0, source_files='', source_type=1, stf_type=8, path='.', filename='DATA/SOURCE'):
+    """ Writes SPECFEM2D SOURCE file
+    """
+    lines = []
+    for i in range(len(s_coords_x)):
+        lines += ['#SOURCE {} \n'.format(str(i).zfill(4)) \
+            + 'source_surf = .true. \n' \
+            + 'xs = {0} \n'.format(s_coords_x[i]) \
+            + 'zs = {0} \n'.format(s_coords_y[i]) \
+            + 'source_type = {0} \n'.format(source_type) \
+            + 'time_function_type = {0} \n'.format(stf_type) \
+            + 'name_of_source_file = {0} \n'.format(source_files[i]) \
+            + 'burst_band_width = 0. \n' \
+            + 'f0 = {0} \n'.format(f0) \
+            + 'tshift = 0. \n' \
+            + 'anglesource = 0. \n' \
+            + 'Mxx = 1. \n' \
+            + 'Mzz = 1. \n' \
+            + 'Mxz = 0. \n' \
+            + 'factor = 1e10 \n']
+
+    # write file
+    with open(path +'/'+ filename, 'w') as file:
+        file.writelines(lines)
+
+
+def write_stations_specfem2d(r_coords_x, r_coords_y, path='.', filename='DATA/STATIONS'):
+    """ Writes SPECFEM2D STATIONS file
+    """
+    lines = []
+    for i in range(len(r_coords_x)):
+        lines += ['S{0} \t AA \t {1} \t {2} \t 0.0 \t 0.0 \n'.format(str(i).zfill(4), r_coords_x[i], r_coords_y[i])]
+
+    # write file
+    with open(path +'/'+ filename, 'w') as file:
+        file.writelines(lines)
+
+
 class Minmax(defaultdict):
     """ Keeps track of min,max values of model or kernel
     """

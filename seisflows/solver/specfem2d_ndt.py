@@ -179,6 +179,36 @@ class specfem2d_ndt(custom_import('solver', 'base')):
         call_solver(system.mpiexec(), 'bin/xspecfem2D')
 
 
+    def estimate_source(self):
+        """ Estimates source time function (stf)
+        Time-reversed recorded traces are simultaneously injected into the model at receivers
+        The stf is reconstructed at source location
+        """
+
+        # time-flip data and save in text files under DATA/SOURCES/S_xxxx.txt
+        preprocess.prepare_eval_source(self.cwd)    # source estimation by time reversed modeling
+
+        # set multiple SOURCES at receiving locations and single receiver in Parfile
+        setpar('NSOURCES', str(PAR.NREC))    # set number of sources
+
+        # run simulation and record source time function
+        setpar('SIMULATION_TYPE', '1')
+        setpar('SAVE_FORWARD', '.false.')
+        call_solver(system.mpiexec(), 'bin/xmeshfem2D')
+        call_solver(system.mpiexec(), 'bin/xspecfem2D')
+
+        if PAR.FORMAT in ['SU', 'su']:
+            filenames = glob('OUTPUT_FILES/*.su')
+            unix.mv(filenames, 'traces/syn')
+
+        # use estimated SOURCE
+        preprocess.set_eval_source(self.cwd)
+        setpar('NSOURCES', str(1))
+
+        # reset full STATIONS for the coming "normal" forward simulation
+        preprocess.reset_eval_stations(self.cwd)
+
+
     ### file transfer utilities
 
     def import_model(self, path):

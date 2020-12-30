@@ -1,5 +1,6 @@
 
 import sys
+import os
 import numpy as np
 import obspy
 
@@ -9,6 +10,7 @@ from seisflows.config import ParameterError
 
 from seisflows.plugins import adjoint, misfit, readers, writers
 from seisflows.tools import signal
+from seisflows.tools.seismic import write_source_specfem2d, write_stations_specfem2d
 
 PAR = sys.modules['seisflows_parameters']
 PATH = sys.modules['seisflows_paths']
@@ -158,6 +160,27 @@ class base(object):
         self.writer(adj, path, channel)
 
 
+    def write_obs_as_sources(self, path, path_out, obs, channel):
+        """ Writes observed traces as source for time reversed simulation
+          INPUT
+            PATH - location time reversed observed traces will be written
+            OBS - obspy Stream object containing "time reversed" observed data
+            CHANNEL - channel or component code used by writer
+        """
+        nt, dt, _ = self.get_time_scheme(obs)
+        nn, _ = self.get_network_size(obs)
+
+        writer_ascii = getattr(writers, 'ascii_2')
+
+        writer_ascii(obs, path_out, channel, dt)
+        source_files = [path_out + '/' + channel + str(ir).zfill(4) for ir in range(len(obs))]
+
+        r_coords_x, r_coords_y, _ = self.get_receiver_coords(obs)
+        s_coords_x, s_coords_y, _ = self.get_source_coords(obs)
+        write_source_specfem2d(r_coords_x, r_coords_y, PAR.F0, source_files, source_type=1, stf_type=8, path=path)
+        write_stations_specfem2d([s_coords_x[0]], [s_coords_y[0]], path=path)   # single station
+
+
     ### signal processing
 
     def apply_filter(self, traces):
@@ -265,16 +288,74 @@ class base(object):
 
     def apply_filter_backwards(self, traces):
         for tr in traces:
-            tr.data = np.flip(tr.data)
+            tr.data = np.flip(tr.data, 0)
 
-        traces = self.apply_filter()
+        traces = self.apply_filter(traces)
 
         for tr in traces:
-            tr.data = np.flip(tr.data)
+            tr.data = np.flip(tr.data, 0)
 
         return traces
 
 
+    def revert_time(self, traces):
+        for tr in traces:
+            tr.data = np.flip(tr.data, 0)
+        
+        return traces
+
+
+    def prepare_eval_source(self, path='.'):
+        """ Prepares sources for forward simulation
+        Used in case the estimation of source time function is needed
+          INPUT
+            PATH - directory containing observed data
+        """
+        solver = sys.modules['seisflows_solver']
+        path_out = path+'/'+'DATA/traces_obs_tr'
+        if not os.path.exists(path_out):
+            os.makedirs(path_out)
+
+        for filename in solver.data_filenames:
+            obs = self.reader(path+'/'+'traces/obs', filename)
+            obs = self.revert_time(obs)
+
+            # process observations
+            obs = self.apply_filter(obs)
+            obs = self.apply_mute(obs)
+            obs = self.apply_normalize(obs)
+
+            self.write_obs_as_sources(path, path_out, obs, filename)
+
+
+    def set_eval_source(self, path='.'):
+        """ Uses the estimated source time function
+        """
+        solver = sys.modules['seisflows_solver']
+        path_out = path+'/'+'DATA/estimated_stf'
+        if not os.path.exists(path_out):
+            os.makedirs(path_out)
+
+        for filename in solver.data_filenames:
+            syn = self.reader(path+'/'+'traces/syn', filename)  # estimated source time
+            syn = self.revert_time(syn)
+
+            self.write_obs_as_sources(path, path_out, syn, filename)
+
+
+    def reset_eval_stations(self, path='.'):
+        """ Resets (single) source for forward/ adjoint simulation
+        """
+        solver = sys.modules['seisflows_solver']
+
+        for filename in solver.data_filenames:
+            obs = self.reader(path+'/'+'traces/obs', filename)
+
+            #s_coords_x, s_coords_y, _ = self.get_source_coords(obs)
+            #x, y = [s_coords_x[0]], [s_coords_y[0]]    # single source
+            #write_source_specfem2d(x, y, PAR.F0, ['\"\"'], source_type=1, stf_type=1, path=path)
+            r_coords_x, r_coords_y, _ = self.get_receiver_coords(obs)   # single source
+            write_stations_specfem2d(r_coords_x, r_coords_y, path)   # full stations
 
     ### additional parameter checking
 

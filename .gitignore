@@ -1,6 +1,7 @@
 *.exe
 *.pyc
 *.swp
-doc/_build
+.vscode/
+docs/_build
 parameters*c
 paths*c

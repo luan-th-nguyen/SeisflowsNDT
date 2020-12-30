@@ -185,6 +185,18 @@ class base(object):
 
     ### high-level solver interface
 
+    def eval_source(self, path='', export_traces=False, write_residuals=True):
+        """ Performs source time function estimation
+
+          INPUT
+            PATH - the directory from which model is imported
+            EXPORT_TRACES - save or discard traces?
+        """
+        unix.cd(self.cwd)
+        self.import_model(path)
+        self.estimate_source()
+
+
     def eval_func(self, path='', export_traces=False, write_residuals=True):
         """ Performs forward simulations needed for misfit function evaluation
 
@@ -239,7 +251,7 @@ class base(object):
 
     ### low-level solver interface
 
-    def forward(self):
+    def forward(self, path='traces/syn'):
         """ Calls forward solver
         """
         # must be implemented by subclass
@@ -248,6 +260,13 @@ class base(object):
 
     def adjoint(self):
         """ Calls adjoint solver
+        """
+        # must be implemented by subclass
+        raise NotImplementedError
+
+
+    def estimate_source(self):
+        """ Estimates source time function
         """
         # must be implemented by subclass
         raise NotImplementedError

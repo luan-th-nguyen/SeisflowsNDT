@@ -34,7 +34,22 @@ def ascii(stream, path, filenames):
         w = tr.data
 
         print(path +'/'+ tr.stats.filename)
-        print(times.shape, tr.data.shape)
+        print(t.shape, tr.data.shape)
         np.savetxt(path +'/'+ tr.stats.filename,
                    np.column_stack((t, w)))
 
+
+def ascii_2(stream, path, channel, dt):
+    for ir, tr in enumerate(stream):
+        nt = tr.stats.npts
+        t1 = float(tr.stats.starttime)
+        t2 = t1 + tr.stats.npts*dt
+        #print(nt, t1, t2)
+
+        t = np.linspace(t1, t2, nt)
+        w = tr.data
+
+        file_out = path +'/'+ channel + str(ir).zfill(4)
+        #print(file_out)
+        #print(t.shape, tr.data.shape)
+        np.savetxt(file_out, np.column_stack((t, w)))
