@@ -149,6 +149,6 @@ if __name__ == '__main__':
     plt.ylabel('z [m]')
     plt.grid(linestyle='--',linewidth=1)
     plt.colorbar(orientation='horizontal',label=parameter)
-    #plt.show()
-    fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
+    plt.show()
+    #fig.savefig(model.split('/')[-1]+'_'+parameter+'.png')
 

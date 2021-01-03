@@ -3,7 +3,7 @@ WORKFLOW='inversion'    # inversion, migration
 SOLVER='specfem2d'      # specfem2d, specfem3d
 #SYSTEM='serial'         # serial, pbs, slurm
 SYSTEM='multicore'         # serial, pbs, slurm
-NPROCMAX=24
+NPROCMAX=8
 OPTIMIZE='LBFGS'        # NLCG, LBFGS
 PREPROCESS='base'       # base
 POSTPROCESS='base'      # base
@@ -41,7 +41,7 @@ SCALE=6.0e6             # scaling factor
 # OPTIMIZATION
 PRECOND=None            # preconditioner type
 STEPMAX=10              # maximum trial steps
-STEPTHRESH=0.1          # step length safeguard
+#STEPTHRESH=0.1          # step length safeguard
 
 
 # SOLVER
