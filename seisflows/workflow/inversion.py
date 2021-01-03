@@ -9,6 +9,7 @@ from os.path import join
 from seisflows.tools import msg
 from seisflows.tools import unix
 from seisflows.tools.tools import divides, exists
+from seisflows.tools.math import shuffle_sources
 from seisflows.config import ParameterError, save
 from seisflows.workflow.base import base
 
@@ -116,17 +117,23 @@ class inversion(base):
         """ Carries out seismic inversion
         """
         optimize.iter = PAR.BEGIN
+        self._mini_batch = None
         self.setup()
         start_time = time.time()
         print ''
 
         while optimize.iter <= PAR.END:
             print "Starting iteration", optimize.iter
+
+            # select mini-batch
+            self._mini_batch = shuffle_sources(PAR.NMINIBATCH, PAR.NTASK)
             
+            # estimate source
             if PAR.ESTIMATE_SOURCE:
                 print "Estimating source time function"
                 self.estimate_source()
 
+            # run forward and save synthetics
             self.initialize()
 
             print "Computing gradient"

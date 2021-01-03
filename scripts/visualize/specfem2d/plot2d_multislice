@@ -31,24 +31,24 @@ def read_multislice(model, NSLICE, parameter):
     model_all = np.empty(shape=(0, 0))
 
     for si in range(NSLICE):
-	#file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
-	#file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
-	file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
-	file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
-	file_d = model + '/proc' + str(si).zfill(6) + '_' + parameter + '.bin'
+        #file_x = 'model_init' + '/proc' + str(si).zfill(6) + '_x.bin'
+        #file_z = 'model_init' + '/proc' + str(si).zfill(6) + '_z.bin'
+        file_x = model + '/proc' + str(si).zfill(6) + '_x.bin'
+        file_z = model + '/proc' + str(si).zfill(6) + '_z.bin'
+        file_d = model + '/proc' + str(si).zfill(6) + '_' + parameter + '.bin'
 
-	# check that files actually exist
-	assert exists(file_x), file_x + ' does not exist'
-    	assert exists(file_z), file_z + ' does not exist'
-    	assert exists(file_d), file_d + ' does not exist'
+        # check that files actually exist
+        assert exists(file_x), file_x + ' does not exist'
+        assert exists(file_z), file_z + ' does not exist'
+        assert exists(file_d), file_d + ' does not exist'
 
-	x_coords = read_fortran(file_x)
-	z_coords = read_fortran(file_z)
-	model_slice = read_fortran(file_d)
+        x_coords = read_fortran(file_x)
+        z_coords = read_fortran(file_z)
+        model_slice = read_fortran(file_d)
 
-    	x_coords_all = np.append(x_coords_all,x_coords[:])
-    	z_coords_all = np.append(z_coords_all,z_coords[:])
-    	model_all = np.append(model_all,model_slice[:])
+        x_coords_all = np.append(x_coords_all,x_coords[:])
+        z_coords_all = np.append(z_coords_all,z_coords[:])
+        model_all = np.append(model_all,model_slice[:])
 
     # check mesh dimensions
     assert x_coords_all.shape == z_coords_all.shape == model_all.shape, 'Inconsistent mesh dimensions.'
@@ -89,7 +89,6 @@ def mesh2grid(v, x, z):
     print 'nz =', nz
     print 'nx =', nx
     return X, Z, np.reshape(V, (int(nz), int(nx)))
-    
 
 
 def _stack(*args):
@@ -125,10 +124,10 @@ if __name__ == '__main__':
     fig = plt.figure()
     #fig,ax = plt.subplots()
 
-    #plt.pcolor(X, Z, V[:,:],cmap='seismic')
+    plt.pcolor(X, Z, V[:,:],cmap='seismic')
     #plt.pcolor(X, Z, V[:,:], vmin=1200, vmax=3600, cmap='seismic') # for Vp
     #plt.pcolor(X, Z, V[:,:], vmin=1800, vmax=2500, cmap='seismic') # for Rho
-    plt.pcolor(X, Z, V[:,:], vmin=500, vmax=2500, cmap='seismic') # for Vs
+    #plt.pcolor(X, Z, V[:,:], vmin=500, vmax=2500, cmap='seismic') # for Vs
 
 
     plt.axes().set_aspect('equal')
@@ -139,12 +138,12 @@ if __name__ == '__main__':
     depth_ticks = zticks[::-1]*1.0e-3   # depth in meter
     #depth_ticks = zticks[:]*1.0e-3   # depth in meter
     width_ticks = xticks[:]*1.0e-3      # width in meter
-    plt.yticks(zticks,depth_ticks)
-    plt.xticks(xticks, width_ticks)
+    #plt.yticks(zticks,depth_ticks)
+    #plt.xticks(xticks, width_ticks)
 
     #plt.axis('equal')
     #plt.axis('tight')
-    
+
     plt.xlabel('x [m]')
     plt.ylabel('z [m]')
     plt.grid(linestyle='--',linewidth=1)

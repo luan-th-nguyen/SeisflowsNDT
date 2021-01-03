@@ -15,7 +15,7 @@ DENSITY='Constant'
 
 # WORKFLOW
 BEGIN=1                 # first iteration
-END=1                   # last iteration
+END=20                   # last iteration
 NREC=132                # number of receivers
 NSRC=24#25                 # number of sources
 SAVEGRADIENT=1          # save gradient how often

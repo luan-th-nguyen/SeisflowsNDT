@@ -36,6 +36,10 @@ class multicore(custom_import('system', 'serial')):
         if 'NTASK' not in PAR:
             raise ParameterError(PAR, 'NTASK')
 
+        # size of mini-batches
+        if 'NMINIBATCH' not in PAR:
+            setattr(PAR, 'NMINIBATCH', PAR.NTASK)
+
         # number of cores per task
         if 'NPROC' not in PAR:
             raise ParameterError(PAR, 'NPROC')
@@ -62,7 +66,12 @@ class multicore(custom_import('system', 'serial')):
         self.checkpoint(PATH.OUTPUT, classname, method, args, kwargs)
 
         running_tasks = dict()
-        queued_tasks = range(PAR.NTASK)
+        workflow = sys.modules['seisflows_workflow']
+        #print workflow._mini_batch
+        if (workflow._mini_batch is None) | (PAR.NMINIBATCH == PAR.NTASK):
+            queued_tasks = range(PAR.NTASK)
+        else:
+            queued_tasks = list(workflow._mini_batch)
 
         # implements "work queue" pattern
         while queued_tasks or running_tasks:
