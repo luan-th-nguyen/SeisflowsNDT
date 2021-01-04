@@ -35,6 +35,10 @@ class serial(custom_import('system', 'base')):
         if 'NTASK' not in PAR:
             setattr(PAR, 'NTASK', 1)
 
+        # size of mini-batches
+        if 'NMINIBATCH' not in PAR:
+            setattr(PAR, 'NMINIBATCH', PAR.NTASK)
+
         # number of processers per task
         if 'NPROC' not in PAR:
             setattr(PAR, 'NPROC', 1)

@@ -28,6 +28,7 @@ class test_system:
 
 
     def main(self):
+        self._mini_batch = None
         system.run('workflow', 'hello',  
             msg='Hello from 0')
 
