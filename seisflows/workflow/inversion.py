@@ -126,7 +126,8 @@ class inversion(base):
             print "Starting iteration", optimize.iter
 
             # select mini-batch
-            self._mini_batch = shuffle_sources(PAR.NMINIBATCH, PAR.NTASK)
+            if PAR.NMINIBATCH:
+                self._mini_batch = shuffle_sources(PAR.NMINIBATCH, PAR.NTASK)
             
             # estimate source
             if PAR.ESTIMATE_SOURCE:
