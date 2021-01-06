@@ -364,13 +364,12 @@ class base(object):
 
         unix.cd(self.cwd)
         workflow = sys.modules['seisflows_workflow']
-        self.source_names_mini_batch = [str(si).zfill(6) for si in workflow._mini_batch]
-        #print self.source_names_mini_batch
         with open('kernel_paths', 'w') as file:
             if (workflow._mini_batch is None) | (PAR.NMINIBATCH == PAR.NTASK):
                 file.writelines([join(input_path, name+'\n')
                     for name in self.source_names])
             else:
+                self.source_names_mini_batch = [str(si).zfill(6) for si in workflow._mini_batch]
                 file.writelines([join(input_path, name+'\n')
                     for name in self.source_names_mini_batch])
 

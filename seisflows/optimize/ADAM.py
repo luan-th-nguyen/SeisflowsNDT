@@ -3,6 +3,7 @@ import sys
 import numpy as np
 
 from seisflows.config import custom_import, ParameterError
+from seisflows.plugins import optimize
 
 PAR = sys.modules['seisflows_parameters']
 PATH = sys.modules['seisflows_paths']
@@ -26,9 +27,16 @@ class ADAM(custom_import('optimize', 'base')):
     def setup(self):
         super(ADAM, self).setup()
 
+        self.ADAM = getattr(optimize, 'ADAM')(
+            path=PATH.OPTIMIZE,
+            precond=self.precond)
+
 
     def compute_direction(self):
-        super(ADAM, self).compute_direction()
+        """ Computes search direction
+        """
+        p_new = self.ADAM()
+        self.save('p_new', p_new)
 
 
     def restart(self):
