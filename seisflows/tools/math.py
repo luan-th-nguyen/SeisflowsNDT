@@ -208,5 +208,5 @@ def tv(Z, h=[], epsilon=1.e-6):
 def shuffle_sources(n_minibatch, ntasks):
     # suffles sources
     perm = list(np.random.permutation(ntasks-1))
-    # select m out of PAR.NSRC sources
+    # select m out of PAR.NTASK sources
     return perm[:n_minibatch]
