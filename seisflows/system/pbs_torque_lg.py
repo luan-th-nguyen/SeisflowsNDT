@@ -48,6 +48,10 @@ class pbs_torque_lg(custom_import('system', 'base')):
         if 'NTASK' not in PAR:
             raise ParameterError(PAR, 'NTASK')
 
+        # size of mini-batches
+        if 'NMINIBATCH' not in PAR:
+            setattr(PAR, 'NMINIBATCH', PAR.NTASK)
+
         # number of cores per task
         if 'NPROC' not in PAR:
             raise ParameterError(PAR, 'NPROC')
@@ -141,6 +145,23 @@ class pbs_torque_lg(custom_import('system', 'base')):
 
     def run(self, classname, method, hosts='all', **kwargs):
         """ Executes the following task:
+              classname.method(*args, **kwargs)
+        """
+        self.checkpoint(PATH.OUTPUT, classname, method, hosts, kwargs)
+
+        jobs = self.submit_job_array(classname, method, hosts)
+        while True:
+            # wait a few seconds before checking again
+            time.sleep(5)
+            self._timestamp()
+            isdone, jobs = self.job_array_status(classname, method, jobs)
+            if isdone:
+		#print 'Job-array is finished' # testing
+                return
+
+
+    def run_single(self, classname, method, hosts='head', **kwargs):
+        """ Executes task a single  time
               classname.method(*args, **kwargs)
         """
         self.checkpoint(PATH.OUTPUT, classname, method, hosts, kwargs)
