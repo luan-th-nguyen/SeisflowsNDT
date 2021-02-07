@@ -172,8 +172,10 @@ class pbs_torque_lg(custom_import('system', 'base')):
             time.sleep(5)
             self._timestamp()
             isdone, jobs = self.job_array_status(classname, method, jobs)
+            #print isdone, jobs
             if isdone:
-		#print 'Job-array is finished' # testing
+		# wait a few more seconds
+                time.sleep(5)
                 return
 
 
@@ -221,7 +223,9 @@ class pbs_torque_lg(custom_import('system', 'base')):
 
         #resources += ',nodes=%d:ppn=%d:procs=%d'%(nodes,ncpus,mpiprocs)
         #resources += ',nodes=%d:ppn=%d'%(nodes,ncpus)
-        resources += ',nodes=%d:ppn=%d'%(1,4)
+
+        resources += ',nodes=%d:ppn=%d'%(1,4)	# medium
+        #resources += ',nodes=%d:ppn=%d'%(2,4)	# large
 
 	# ssh is needed because qsub from compute nodes are not allowed
         cmd =   'ssh luan@master ' \

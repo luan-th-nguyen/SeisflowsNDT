@@ -47,8 +47,8 @@ class regularize(custom_import('postprocess', 'base')):
         if not exists(path):
             raise Exception
 
-        #system.run_single('postprocess', 'process_kernels',
-	self.process_kernels(
+        system.run_single('postprocess', 'process_kernels',
+	#self.process_kernels(
             path=path+'/kernels',
             parameters=solver.parameters)
 
@@ -76,8 +76,8 @@ class regularize(custom_import('postprocess', 'base')):
         """
         assert exists(path)
 
-        system.run_single('solver', 'combine',
-	#solver.combine(
+        #system.run_single('solver', 'combine',
+	solver.combine(
                    input_path=path,
                    output_path=path+'/'+'sum',
                    parameters=parameters)

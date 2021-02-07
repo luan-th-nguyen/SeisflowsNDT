@@ -255,6 +255,7 @@ class inversion(base):
                    path=PATH.GRAD,
                    export_traces=divides(optimize.iter, PAR.SAVETRACES))
 
+        #print 'PATH.GRAD is: ', PATH.GRAD
         self.write_gradient(path=PATH.GRAD, suffix='new')
 
 

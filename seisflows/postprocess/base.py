@@ -67,6 +67,12 @@ class base(object):
                  path=path+'/kernels',
                  parameters=solver.parameters)
 
+        #print 'path in write_gradient: ', path+'/kernels'
+        #postprocess = sys.modules['seisflows_postprocess'] # test
+        #postprocess.process_kernels(
+        #         path=path+'/kernels',
+        #         parameters=solver.parameters)
+
         g = solver.merge(solver.load(
                  path +'/'+ 'kernels/sum',
                  suffix='_kernel'))
@@ -92,27 +98,47 @@ class base(object):
               PATH - directory containing sensitivity kernels
               PARAMETERS - list of material parameters to be operated on
         """
+        #if not exists(path):
+        #    raise Exception
+
+        #if not parameters:
+        #    parameters = solver.parameters
+
+        #solver.combine(
+        #       input_path=path,
+        #       output_path=path+'/'+'sum',
+        #       parameters=parameters)
+
+        #if PAR.SMOOTH > 0.:
+        #    src = path+'/'+'sum'
+        #    dst = path+'/'+'sum_nosmooth' 
+        #    unix.mv(src, dst)
+
+        #    solver.smooth(
+        #           input_path=path+'/'+'sum_nosmooth',
+        #           output_path=path+'/'+'sum',
+        #           parameters=parameters,
+        #           span=PAR.SMOOTH)
+
         if not exists(path):
             raise Exception
 
-        if not parameters:
-            parameters = solver.parameters
-
-        solver.combine(
-               input_path=path,
-               output_path=path+'/'+'sum',
-               parameters=parameters)
-
-        if PAR.SMOOTH > 0.:
-            src = path+'/'+'sum'
-            dst = path+'/'+'sum_nosmooth' 
-            unix.mv(src, dst)
+        if PAR.SMOOTH > 0:
+            solver.combine(
+                   input_path=path,
+                   output_path=path+'/'+'sum_nosmooth',
+                   parameters=parameters)
 
             solver.smooth(
                    input_path=path+'/'+'sum_nosmooth',
                    output_path=path+'/'+'sum',
                    parameters=parameters,
                    span=PAR.SMOOTH)
+        else:
+            solver.combine(
+                   input_path=path,
+                   output_path=path+'/'+'sum',
+                   parameters=parameters)
 
 
     def save(self, g, path='', parameters=[], backup=None):
