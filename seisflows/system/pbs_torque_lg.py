@@ -68,7 +68,11 @@ class pbs_torque_lg(custom_import('system', 'base')):
         if 'MPIEXEC' not in PAR:
             setattr(PAR, 'MPIEXEC', 'mpirun')
 
-        # optional additional PBS arguments
+        # optional additional PBS arguments (for submission)
+        if 'PBSARGS_SUBMIT' not in PAR:
+            setattr(PAR, 'PBSARGS_SUBMIT', '-q small')
+
+        # optional additional PBS arguments (for SPECFEM2D jobs)
         if 'PBSARGS' not in PAR:
             setattr(PAR, 'PBSARGS', '')
 
@@ -127,6 +131,7 @@ class pbs_torque_lg(custom_import('system', 'base')):
 
         # prepare qsub arguments
         cmd =   'qsub ' \
+                + '%s ' % PAR.PBSARGS_SUBMIT \
                 + '-N %s ' % PAR.TITLE \
                 + '-l %s ' % resources \
                 + '-o %s ' %( PATH.WORKDIR +'/'+ 'output.log') \

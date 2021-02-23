@@ -1,6 +1,7 @@
 
 import sys
 import numpy as np
+import time
 
 from os.path import join
 from seisflows.tools import unix
@@ -129,6 +130,7 @@ class base(object):
                    output_path=path+'/'+'sum_nosmooth',
                    parameters=parameters)
 
+            #time.sleep(5)
             solver.smooth(
                    input_path=path+'/'+'sum_nosmooth',
                    output_path=path+'/'+'sum',
@@ -139,6 +141,8 @@ class base(object):
                    input_path=path,
                    output_path=path+'/'+'sum',
                    parameters=parameters)
+
+        #time.sleep(5)
 
 
     def save(self, g, path='', parameters=[], backup=None):

@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import numpy as np
+import time
 
 from functools import partial
 from glob import glob
@@ -441,6 +442,7 @@ class base(object):
         dst = join(path, 'kernels', self.source_name)
         unix.mkdir(dst)
         unix.mv(src, dst)
+        time.sleep(10.0)
 
     def export_residuals(self, path):
         unix.mkdir(join(path, 'residuals'))
