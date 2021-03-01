@@ -103,6 +103,7 @@ class base(object):
             if PAR.MISFIT:
                 self.write_residuals(path, syn, obs)
 
+            filename = filename.replace('_d.su', '.su')    # names of adjoint traces are without '_d'
             self.write_adjoint_traces(path+'/'+'traces/adj', syn, obs, filename)
 
 

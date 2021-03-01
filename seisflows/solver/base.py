@@ -442,7 +442,7 @@ class base(object):
         dst = join(path, 'kernels', self.source_name)
         unix.mkdir(dst)
         unix.mv(src, dst)
-        time.sleep(10.0)
+        time.sleep(15.0)
 
     def export_residuals(self, path):
         unix.mkdir(join(path, 'residuals'))
@@ -457,6 +457,7 @@ class base(object):
         src = join(self.cwd, prefix)
         dst = join(path, self.source_name)
         unix.cp(src, dst)
+        #time.sleep(2.0)
 
 
     def rename_kernels(self):
@@ -537,6 +538,7 @@ class base(object):
                 t.data[:] = 0.
 
             # write traces
+            filename = filename.replace('_d.su', '.su')    # names of adjoint traces are without '_d'
             preprocess.writer(d, self.cwd +'/'+ 'traces/adj', filename)
 
 
